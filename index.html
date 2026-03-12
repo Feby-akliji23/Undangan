@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Undangan Pernikahan — Salsa & Hadri</title>
+  <script>
+    (function restoreBootClass() {
+      document.documentElement.classList.add('scene-boot');
+      setTimeout(function () {
+        document.documentElement.classList.remove('scene-boot');
+      }, 2500);
+      try {
+        var s = JSON.parse(sessionStorage.getItem('wss_sh26') || '{}');
+        if (s && s.inviteOpen) {
+          document.documentElement.classList.add('invite-open-boot');
+        } else if (s && (Number(s.jAccum || 0) > 0 || Number(s.zone || 0) === 1)) {
+          document.documentElement.classList.add('journey-open-boot');
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Cinzel:wght@400;500;600&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet">
+  </noscript>
+</head>
+<body>
+
+<div id="canvas">
+  <div class="bg-paper"></div>
+  <canvas id="bgRays"></canvas>
+  <div class="bg-warm" id="bgWarm"></div>
+
+  <div class="obj flower-tl" id="fcTL"><img src="assets/images/hero/bunga%20kiri%20atas.png"   alt=""></div>
+  <div class="obj flower-tr" id="fcTR"><img src="assets/images/hero/bunga%20kanan%20atas.png"  alt=""></div>
+  <div class="obj flower-bl" id="fcBL"><img src="assets/images/hero/bunga%20kiri%20bawah.png"  alt=""></div>
+  <div class="obj flower-br" id="fcBR"><img src="assets/images/hero/bunga%20kanan%20bawah.png" alt=""></div>
+
+  <div class="obj" id="birds"><img src="assets/images/hero/burung.png" alt="" aria-hidden="true"></div>
+
+  <div class="obj txt txt-intro" id="layerIntro">
+    <p class="intro-eyebrow">Mengumumkan Pernikahan</p>
+    <h1 class="intro-title">Salsa <span class="intro-and">&amp;</span> Hadri</h1>
+    <p class="intro-date">8 April, 2026</p>
+    <p class="intro-place">Sumatra, Morowali</p>
+  </div>
+
+  <div class="obj txt txt-prayer" id="layerPrayer">
+    <div class="prayer-ring"><img src="assets/images/hero/icon%20gold.png" alt="" aria-hidden="true"></div>
+    <p class="prayer-ornament">Bismillahirrahmanirrahim</p>
+    <p>Assalamu'alaikum Warahmatullaahi Wabarakaatuh</p>
+    <p>Maha Suci Allah yang telah menciptakan makhluk-Nya berpasang-pasangan. Ya Allah semoga ridho-Mu tercurah mengiringi pernikahan kami:</p>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     JOURNEY CANVAS — "Perjalanan Kami"
+     Background uses backgroundSize/backgroundPosition (never clips).
+     Foreground is a PNG with transparency layered on top.
+═══════════════════════════════════════════════════ -->
+<div id="journeyCanvas">
+
+  <!-- Judul fixed di tengah atas — muncul selama journey aktif -->
+  <div id="jTitle">Perjalanan Kami</div>
+
+  <!-- Chapter 1: Pertemuan -->
+  <div class="jchapter" id="jch1">
+    <div class="jbg" id="jch1bg" style="background-image:url('assets/images/story/scene1_back.png')"></div>
+    <img class="jfg" id="jch1fg" src="assets/images/story/scene1_front.png" alt="">
+    <div class="jvignette"></div>
+    <div class="jdialog" id="jch1dlg">
+      <p class="jdialog-label"></p>
+      <p class="jdialog-text"></p>
+      <p class="jdialog-date"></p>
+    </div>
+  </div>
+
+  <!-- Chapter 2: Percakapan -->
+  <div class="jchapter" id="jch2">
+    <div class="jbg" id="jch2bg" style="background-image:url('assets/images/story/scene2_back.png')"></div>
+    <img class="jfg" id="jch2fg" src="assets/images/story/scene2_front.png" alt="">
+    <div class="jvignette"></div>
+    <div class="jdialog" id="jch2dlg">
+      <p class="jdialog-label"></p>
+      <p class="jdialog-text"></p>
+      <p class="jdialog-date"></p>
+    </div>
+  </div>
+
+  <!-- Chapter 3: Bersama -->
+  <div class="jchapter" id="jch3">
+    <div class="jbg" id="jch3bg" style="background-image:url('assets/images/story/scene3_back.png')"></div>
+    <img class="jfg" id="jch3fg" src="assets/images/story/scene3_front.png" alt="">
+    <div class="jvignette"></div>
+    <div class="jdialog" id="jch3dlg">
+      <p class="jdialog-label"></p>
+      <p class="jdialog-text"></p>
+      <p class="jdialog-date"></p>
+    </div>
+  </div>
+
+  <!-- Chapter 4: Ikrar -->
+  <div class="jchapter" id="jch4">
+    <div class="jbg" id="jch4bg" style="background-image:url('assets/images/story/scene4_back.png')"></div>
+    <img class="jfg" id="jch4fg" src="assets/images/story/scene4_front.png" alt="">
+    <div class="jvignette"></div>
+    <div class="jdialog" id="jch4dlg">
+      <p class="jdialog-label"></p>
+      <p class="jdialog-text"></p>
+      <p class="jdialog-date"></p>
+    </div>
+  </div>
+
+  <div id="jHint"><div class="hint-line"></div><span>Scroll</span></div>
+  <div id="jDots">
+    <div class="jdot" data-i="0"></div>
+    <div class="jdot" data-i="1"></div>
+    <div class="jdot" data-i="2"></div>
+    <div class="jdot" data-i="3"></div>
+  </div>
+</div>
+
+<div class="progress-bar" id="progressBar"></div>
+<div class="scroll-hint" id="scrollHint"><div class="hint-line"></div><span>Scroll</span></div>
+<button class="btn-continue" id="btnContinue">Lihat Undangan ↓</button>
+<button class="btn-top" id="btnTop" title="Kembali ke atas"></button>
+<button class="btn-down" id="btnDown" title="Buka undangan"></button>
+<audio id="bgMusic" loop preload="metadata"></audio>
+<button class="btn-music" id="btnMusic" type="button" aria-label="Nyalakan musik" aria-pressed="false" title="Nyalakan musik">
+  <span class="btn-music-note" aria-hidden="true">♪</span>
+</button>
+
+<div id="main-content">
+
+  <!-- NAV -->
+  <nav class="mc-nav">
+    <button id="btnBack" class="mc-back-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><polyline points="15 18 9 12 15 6"/></svg>
+      Kembali
+    </button>
+  </nav>
+
+  <!-- MAIN WRAPPER -->
+  <main class="mc-main">
+
+    <!-- ══════════════════════════════════════
+         MC1 — Mempelai & Tanggal
+    ══════════════════════════════════════ -->
+    <section id="mc1" class="mc-card">
+      <div class="mc-card-inner">
+
+        <!-- Label col (desktop: pinned left) -->
+        <div class="mc-card-label-col">
+          <div class="mc-ornament" aria-hidden="true">
+            <span class="mc-orn-line"></span>
+            <span class="mc-orn-diamond">◇</span>
+            <span class="mc-orn-line"></span>
+          </div>
+          <h1 class="mc-section-title">Undangan<br>Pernikahan</h1>
+        </div>
+
+        <!-- Content col -->
+        <div class="mc-card-content-col">
+
+          <p class="mc-lead mc-reveal">
+            Dengan hati yang penuh syukur, kami mengundang Bapak&nbsp;/&nbsp;Ibu&nbsp;/&nbsp;Saudara/i untuk hadir dan mendoakan hari bahagia kami.
+          </p>
+
+          <!-- names -->
+          <div class="mc-names-block mc-reveal">
+            <span class="mc-name">Salsa</span>
+            <span class="mc-name-amp">&amp;</span>
+            <span class="mc-name">Hadri</span>
+          </div>
+
+          <!-- info acara -->
+          <div class="mc-event-card mc-reveal">
+            <p class="mc-event-label">Acara Pernikahan</p>
+            <p class="mc-event-time">Rabu, 8 April 2026</p>
+            <div class="mc-event-divider"></div>
+            <p class="mc-event-detail">
+              Acara berlangsung pukul 08.00 WIB hingga selesai di kediaman mempelai pria,
+              dirumah <strong>Bapak Hasanudin</strong> — Desa Lea, Kec. Tellu Siattinge, Bone, Sulawesi Selatan.
+            </p>
+            <a href="https://maps.google.com/?q=DESA+LEA+KEC.+TELLU+SIATTINGE+BONE+SULAWESI+SELATAN"
+               target="_blank" rel="noopener" class="mc-maps-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7Zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z"/></svg>
+              Buka Maps
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </section><!-- /mc1 -->
+
+
+    <!-- ══════════════════════════════════════
+         MC2 — Hadiah
+    ══════════════════════════════════════ -->
+    <section id="mc2" class="mc-card">
+      <div class="mc-card-inner">
+
+        <div class="mc-card-label-col">
+          <div class="mc-ornament" aria-hidden="true">
+            <span class="mc-orn-line"></span>
+            <span class="mc-orn-diamond">◇</span>
+            <span class="mc-orn-line"></span>
+          </div>
+          <h2 class="mc-section-title">Hadiah<br>Pernikahan</h2>
+        </div>
+
+        <div class="mc-card-content-col">
+          <p class="mc-lead mc-reveal">
+            Doa dan kehadiran kalian adalah hadiah terbesar. Namun jika ingin berbagi kebaikan, berikut informasinya.
+          </p>
+
+          <!-- 2 kartu rekening -->
+          <div class="mc-gift-grid mc-reveal">
+
+        <!-- BCA -->
+        <article class="mc-gift-card">
+          <div class="mc-gift-header">
+            <span class="mc-gift-bank mc-gift-bank-bca">
+              <img src="assets/images/logo/Bank%20BCA%20Logo.png" alt="Bank BCA" loading="eager" decoding="async">
+            </span>
+            <span class="mc-gift-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><rect x="3.5" y="6.5" width="17" height="11" rx="1.8"/><path d="M7 10.5h6M7 13.5h4M17.5 10.6a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0Z"/></svg>
+            </span>
+          </div>
+          <p class="mc-gift-name">Salsa Brilda Alvaini</p>
+          <div class="mc-gift-divider"></div>
+          <div class="mc-gift-number-row">
+            <span class="mc-gift-number">009 - 0222 2444 21</span>
+            <p id="giftn1" style="display:none">009 - 0222 2444 21</p>
+            <button class="mc-gift-copy" onclick="copyGift('giftn1',this)" title="Salin nomor">⧉</button>
+          </div>
+        </article>
+
+        <!-- Mandiri -->
+        <article class="mc-gift-card">
+          <div class="mc-gift-header">
+            <span class="mc-gift-bank mc-gift-bank-mandiri">
+              <img src="assets/images/logo/Bank%20Mandiri%20Logo.png" alt="Bank Mandiri" loading="eager" decoding="async">
+            </span>
+            <span class="mc-gift-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><rect x="3.5" y="6.5" width="17" height="11" rx="1.8"/><path d="M7 10.5h6M7 13.5h4M17.5 10.6a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0Z"/></svg>
+            </span>
+          </div>
+          <p class="mc-gift-name">Hadri</p>
+          <div class="mc-gift-divider"></div>
+          <div class="mc-gift-number-row">
+            <span class="mc-gift-number">1234 - 5678 - 9012</span>
+            <p id="giftn2" style="display:none">1234 - 5678 - 9012</p>
+            <button class="mc-gift-copy" onclick="copyGift('giftn2',this)" title="Salin nomor">⧉</button>
+          </div>
+        </article>
+
+          </div><!-- /mc-gift-grid -->
+        </div><!-- /mc-card-content-col -->
+      </div><!-- /mc-card-inner -->
+    </section><!-- /mc2 -->
+
+
+    <!-- ══════════════════════════════════════
+         MC3 — Ucapan
+    ══════════════════════════════════════ -->
+    <section id="mc3" class="mc-card">
+      <div class="mc-card-inner">
+
+        <div class="mc-card-label-col">
+          <div class="mc-ornament" aria-hidden="true">
+            <span class="mc-orn-line"></span>
+            <span class="mc-orn-diamond">◇</span>
+            <span class="mc-orn-line"></span>
+          </div>
+          <h2 class="mc-section-title">Sampaikan<br>Ucapan</h2>
+        </div>
+
+        <div class="mc-card-content-col">
+          <p class="mc-lead mc-reveal">Ucapan dan doa kalian sangat berarti bagi kami.</p>
+
+          <!-- form -->
+          <div class="mc-comment-form mc-reveal">
+            <input id="cmtName" placeholder="Nama Anda" maxlength="60" class="mc-input">
+            <textarea id="cmtText" placeholder="Tuliskan pesan & doa…" maxlength="400" class="mc-textarea"></textarea>
+            <button id="cmtSubmit" class="mc-submit-btn">Kirim Ucapan</button>
+          </div>
+
+          <!-- comment list -->
+          <div id="cmtList" class="mc-comment-list">
+            <p id="cmtEmpty" class="mc-comment-empty">Belum ada ucapan. Jadilah yang pertama.</p>
+          </div>
+        </div><!-- /mc-card-content-col -->
+      </div><!-- /mc-card-inner -->
+    </section><!-- /mc3 -->
+
+  </main>
+</div>
+
+<script type="module" src="assets/js/main.js"></script>
+</body>
+</html>
