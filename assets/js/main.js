@@ -91,7 +91,7 @@ const CONFIG = {
     widthMobile:    '92%',   // lebar di mobile (<768px)
     scaleMul:       { mobile: 0.96, desktop: 1.0 }, // tuning responsive scale
     intro:  { x: 50,  y: 30,  scale: 1.0,  rotate:  0,  opacity: 1.0 },
-    prayer: { x: 50,  y: 82,  scale: 1.05, rotate:  0,  opacity: 1.0 },
+    prayer: { x: 50,  y: 82,  scale: 2.05, rotate:  0,  opacity: 1.0 },
   },
 
   /* ── Teks intro (nama & tanggal) ── */
@@ -473,25 +473,74 @@ const jChapters = JOURNEY.chapters.map((_,i) => ({
   dlg: document.getElementById(`jch${i+1}dlg`),
 }));
 
-/* Preload natural image sizes so applyBg can compute true cover scale */
+/* Lazy load journey images: load current + next chapter only */
 const _imgCache = {};
+const _bgUrlRe = /url\(['"]?([^'"]+)['"]?\)/;
+const _getBgSrc = (bgEl) => {
+  const m = (bgEl.style.backgroundImage || '').match(_bgUrlRe);
+  return m ? m[1] : '';
+};
+const _cacheBgNaturalSize = (bgEl, src) => {
+  if (!src) return;
+  if (_imgCache[src]) {
+    bgEl._natW = _imgCache[src].w;
+    bgEl._natH = _imgCache[src].h;
+    return;
+  }
+  const img = new Image();
+  img.onload = () => {
+    _imgCache[src] = { w: img.naturalWidth, h: img.naturalHeight };
+    bgEl._natW = img.naturalWidth;
+    bgEl._natH = img.naturalHeight;
+  };
+  img.src = src;
+};
+const ensureBgLoaded = (idx) => {
+  const jc = jChapters[idx];
+  if (!jc || !jc.bg) return;
+  const bg = jc.bg;
+  const dataSrc = bg.getAttribute('data-bg');
+  if (dataSrc && !bg.style.backgroundImage) {
+    bg.style.backgroundImage = `url('${dataSrc}')`;
+  }
+  const src = _getBgSrc(bg);
+  if (!src) return;
+  if (bg.dataset.loaded === '1') return;
+  bg.dataset.loaded = '1';
+  _cacheBgNaturalSize(bg, src);
+};
+const ensureFgLoaded = (idx) => {
+  const jc = jChapters[idx];
+  if (!jc || !jc.fg) return;
+  const fg = jc.fg;
+  if (fg.dataset.loaded === '1') return;
+  const dataSrc = fg.getAttribute('data-src') || '';
+  const currentSrc = fg.getAttribute('src') || '';
+  const src = dataSrc || currentSrc;
+  if (!src) return;
+  if (dataSrc && currentSrc !== dataSrc) fg.setAttribute('src', dataSrc);
+  else if (!currentSrc) fg.setAttribute('src', src);
+  fg.dataset.loaded = '1';
+};
+const primeJourneyImages = (activeIdx) => {
+  ensureBgLoaded(activeIdx);
+  ensureBgLoaded(activeIdx + 1);
+  ensureFgLoaded(activeIdx);
+  ensureFgLoaded(activeIdx + 1);
+};
+
+/* Preload natural image sizes so applyBg can compute true cover scale */
 const _preloadBgSizes = () => {
   jChapters.forEach(jc => {
     const bg = jc.bg;
-    const urlMatch = bg.style.backgroundImage.match(/url\(['"]?([^'"]+)['"]?\)/);
-    if (!urlMatch) return;
-    const src = urlMatch[1];
-    if (_imgCache[src]) { bg._natW = _imgCache[src].w; bg._natH = _imgCache[src].h; return; }
-    const img = new Image();
-    img.onload = () => {
-      _imgCache[src] = { w: img.naturalWidth, h: img.naturalHeight };
-      bg._natW = img.naturalWidth;
-      bg._natH = img.naturalHeight;
-    };
-    img.src = src;
+    const src = _getBgSrc(bg);
+    if (!src) return;
+    _cacheBgNaturalSize(bg, src);
   });
 };
 setTimeout(_preloadBgSizes, 0);
+ensureBgLoaded(0);
+ensureFgLoaded(0);
 
 /* ── Render hero scene (p: 0→1) ── */
 const renderHero = (p) => {
@@ -562,6 +611,7 @@ const renderJourney = (jp) => {
   // Active chapter for dots
   let activeChIdx = 0;
   C.forEach((ch,i) => { if (jp >= ch._start) activeChIdx = i; });
+  primeJourneyImages(activeChIdx);
   jDotEls.forEach((d,i) => d.classList.toggle('active', i===activeChIdx));
 
   C.forEach((ch, ci) => {
