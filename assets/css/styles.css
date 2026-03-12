@@ -274,7 +274,7 @@
     .bg-paper {
       position:absolute;
       inset:0;
-      background:#f0eeeb url('../images/bg_main_content.png') center center / cover no-repeat;
+      background:#f0eeeb url('../images/bg_main_content.webp') center center / cover no-repeat;
       z-index:0;
     }
     #bgRays   { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:1; }
@@ -533,7 +533,7 @@
     }
     #main-content.mc-bg-ready {
       background:
-        url('../images/bg_main_content1.png') center center / cover no-repeat;
+        url('../images/bg_main_content1.webp') center center / cover no-repeat;
     }
     #main-content.show { opacity:1; pointer-events:auto; }
 
@@ -1203,7 +1203,7 @@
       will-change: background-size, background-position;
     }
 
-    /* Foreground — PNG with transparency, sits above bg */
+    /* Foreground — WEBP with transparency, sits above bg */
     .jfg {
       position:absolute;
       bottom:0; left:50%;
