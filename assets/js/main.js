@@ -45,7 +45,8 @@ const CONFIG = {
   music: {
     src: 'assets/audio/Christian_Bautista_-_The_Way_You_Look_At_Me_(mp3.pm).mp3',
     volume: 0.8,
-    defaultOn: false,
+    defaultOn: true,
+    overrideSavedOffWhenDefaultOn: true,
     storageKey: 'wss_music_on',
   },
 
@@ -173,8 +174,15 @@ const btnTop      = document.getElementById('btnTop');
 const btnDown     = document.getElementById('btnDown');
 const bgMusic     = document.getElementById('bgMusic');
 const btnMusic    = document.getElementById('btnMusic');
+const appLoader   = document.getElementById('appLoader');
+const appLoaderBar  = document.getElementById('appLoaderBar');
+const appLoaderText = document.getElementById('appLoaderText');
+const appEnterBtn  = document.getElementById('appEnterBtn');
 const mainContent = document.getElementById('main-content');
 const btnBack     = document.getElementById('btnBack');
+
+let appReady = false;
+let mainContentAssetsReady = false;
 
 /* ── Comment state — diisi oleh Supabase realtime listener ── */
 let comments = [];
@@ -216,6 +224,12 @@ const applyStaticConfig = () => {
 applyStaticConfig();
 window.addEventListener('resize', applyStaticConfig);
 
+const ensureMainContentAssets = () => {
+  if (mainContentAssetsReady || !mainContent) return;
+  mainContent.classList.add('mc-bg-ready');
+  mainContentAssetsReady = true;
+};
+
 /* ── Music button ── */
 let musicEnabled = CONFIG.music.defaultOn;
 
@@ -236,9 +250,27 @@ const saveMusicPref = () => {
 const loadMusicPref = () => {
   try {
     const raw = localStorage.getItem(CONFIG.music.storageKey);
-    if (raw === '1') musicEnabled = true;
-    else if (raw === '0') musicEnabled = false;
+    if (raw === '1') {
+      musicEnabled = true;
+      return;
+    }
+    if (raw === '0') {
+      if (CONFIG.music.defaultOn && CONFIG.music.overrideSavedOffWhenDefaultOn) {
+        musicEnabled = true;
+        return;
+      }
+      musicEnabled = false;
+    }
   } catch (e) {}
+};
+
+const prepareAudioElement = () => {
+  if (!bgMusic) return;
+  const targetSrc = new URL(CONFIG.music.src, window.location.href).href;
+  if (bgMusic.currentSrc !== targetSrc && bgMusic.src !== targetSrc) {
+    bgMusic.src = CONFIG.music.src;
+  }
+  bgMusic.volume = Math.min(1, Math.max(0, Number(CONFIG.music.volume) || 0));
 };
 
 const playMusic = async () => {
@@ -278,8 +310,7 @@ const initMusic = () => {
   if (!bgMusic || !btnMusic) return;
 
   loadMusicPref();
-  bgMusic.src = CONFIG.music.src;
-  bgMusic.volume = Math.min(1, Math.max(0, Number(CONFIG.music.volume) || 0));
+  prepareAudioElement();
 
   bgMusic.addEventListener('play', () => setMusicUi(true));
   bgMusic.addEventListener('pause', () => setMusicUi(false));
@@ -295,27 +326,178 @@ const initMusic = () => {
     await setMusicState(willPlay, true);
   });
 
+  /* Autoplay pada gesture pertama setelah loader hilang.
+     Browser biasanya baru izinkan play() setelah gesture nyata.
+     Saved-off tetap dihormati, kecuali defaultOn + overrideSavedOffWhenDefaultOn aktif. */
   const kickStart = async () => {
-    if (!musicEnabled || !bgMusic.paused) return;
+    const stored = (() => { try { return localStorage.getItem(CONFIG.music.storageKey); } catch(e){ return null; } })();
+    const savedOff = stored === '0';
+    const respectSavedOff = savedOff && !(CONFIG.music.defaultOn && CONFIG.music.overrideSavedOffWhenDefaultOn);
+    if (respectSavedOff) { musicEnabled = false; setMusicUi(false); removeKick(); return; }
+    if (!bgMusic.paused) { removeKick(); return; }
     const ok = await playMusic();
-    if (ok) {
-      setMusicUi(true);
-      window.removeEventListener('pointerdown', kickStart);
-      window.removeEventListener('keydown', kickStart);
-      window.removeEventListener('touchstart', kickStart);
-      window.removeEventListener('wheel', kickStart);
-    }
+    if (ok) { musicEnabled = true; setMusicUi(true); removeKick(); }
   };
 
-  window.addEventListener('pointerdown', kickStart);
-  window.addEventListener('keydown', kickStart);
-  window.addEventListener('touchstart', kickStart, { passive: true });
-  window.addEventListener('wheel', kickStart, { passive: true });
+  const removeKick = () => {
+    window.removeEventListener('pointerdown', kickStart);
+    window.removeEventListener('touchstart',  kickStart);
+    window.removeEventListener('keydown',     kickStart);
+  };
+
+  window.addEventListener('pointerdown', kickStart, { passive: true });
+  window.addEventListener('touchstart',  kickStart, { passive: true });
+  window.addEventListener('keydown',     kickStart);
 
   setMusicUi(false);
-  if (musicEnabled) kickStart();
+
+  // Coba autoplay langsung; jika diblok browser, kickStart akan handle di interaksi pertama.
+  if (musicEnabled && bgMusic.paused) {
+    playMusic().then((ok) => {
+      if (ok) { setMusicUi(true); removeKick(); }
+    });
+  }
 };
-initMusic();
+
+/* ── Initial loading cover: wait CSS + hero assets + music readiness ── */
+const BOOT_TIMEOUT_MS = 12000;
+const CSS_LINK_SELECTOR = 'link[rel="stylesheet"][href*="assets/css/styles.css"]';
+const URL_RE = /url\((['"]?)(.*?)\1\)/;
+
+const setLoaderStep = (pct, text) => {
+  if (appLoaderBar) appLoaderBar.style.width = `${Math.max(0, Math.min(100, pct))}%`;
+  if (appLoaderText && text) appLoaderText.textContent = text;
+};
+
+const withTimeout = (promise, ms = BOOT_TIMEOUT_MS) =>
+  Promise.race([promise, new Promise(resolve => setTimeout(resolve, ms))]);
+
+const waitStylesReady = () => {
+  const link = document.querySelector(CSS_LINK_SELECTOR);
+  if (!link || link.sheet) return Promise.resolve();
+  return withTimeout(new Promise(resolve => {
+    const done = () => resolve();
+    link.addEventListener('load', done, { once: true });
+    link.addEventListener('error', done, { once: true });
+  }));
+};
+
+const waitImageLoaded = (imgEl) => {
+  if (!imgEl) return Promise.resolve();
+  if (imgEl.complete && imgEl.naturalWidth > 0) return Promise.resolve();
+  return withTimeout(new Promise(resolve => {
+    const done = () => resolve();
+    imgEl.addEventListener('load', done, { once: true });
+    imgEl.addEventListener('error', done, { once: true });
+  }));
+};
+
+const preloadImageSrc = (src) => {
+  if (!src) return Promise.resolve();
+  return withTimeout(new Promise(resolve => {
+    const img = new Image();
+    img.onload = () => resolve();
+    img.onerror = () => resolve();
+    img.src = src;
+  }));
+};
+
+const extractCssUrl = (cssBackground) => {
+  const m = String(cssBackground || '').match(URL_RE);
+  return m ? m[2] : '';
+};
+
+const waitAudioReady = (audioEl) => {
+  if (!audioEl) return Promise.resolve();
+  prepareAudioElement();
+  if (!audioEl.paused) return Promise.resolve();
+  if (audioEl.readyState >= 3) return Promise.resolve();
+  return withTimeout(new Promise(resolve => {
+    const done = () => {
+      audioEl.removeEventListener('canplaythrough', done);
+      audioEl.removeEventListener('canplay', done);
+      audioEl.removeEventListener('loadeddata', done);
+      audioEl.removeEventListener('error', done);
+      resolve();
+    };
+    audioEl.addEventListener('canplaythrough', done, { once: true });
+    audioEl.addEventListener('canplay', done, { once: true });
+    audioEl.addEventListener('loadeddata', done, { once: true });
+    audioEl.addEventListener('error', done, { once: true });
+    try {
+      // Hindari reset playback jika browser sudah memulai fetch audio.
+      if (audioEl.networkState === 0) audioEl.load();
+    } catch (e) { resolve(); }
+  }));
+};
+
+const waitEssentialAssets = async () => {
+  setLoaderStep(16, 'Memuat stylesheet...');
+  await waitStylesReady();
+
+  setLoaderStep(56, 'Menyiapkan hero...');
+  const heroImgs = Array.from(document.querySelectorAll('#canvas .obj img'));
+  const bgPaperEl = document.querySelector('.bg-paper');
+  const bgPaperSrc = bgPaperEl ? extractCssUrl(getComputedStyle(bgPaperEl).backgroundImage) : '';
+  await Promise.all([
+    ...heroImgs.map(waitImageLoaded),
+    preloadImageSrc(bgPaperSrc),
+  ]);
+
+  setLoaderStep(84, 'Menyiapkan musik...');
+  await waitAudioReady(bgMusic);
+};
+
+const hideLoader = () => {
+  if (!appLoader) return;
+  appLoader.setAttribute('aria-hidden', 'true');
+  setTimeout(() => {
+    if (appLoader && appLoader.parentNode) appLoader.parentNode.removeChild(appLoader);
+  }, 620);
+};
+
+const waitForLoaderTap = () => {
+  if (!appEnterBtn) return Promise.resolve();
+
+  return new Promise((resolve) => {
+    appEnterBtn.disabled = false;
+    appEnterBtn.setAttribute('aria-disabled', 'false');
+    appEnterBtn.classList.add('is-ready');
+    setLoaderStep(100, 'Siap — sentuh untuk masuk');
+
+    const onTap = async () => {
+      appEnterBtn.disabled = true;
+      appEnterBtn.setAttribute('aria-disabled', 'true');
+
+      const rect = appEnterBtn.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const maxDx = Math.max(cx, window.innerWidth - cx);
+      const maxDy = Math.max(cy, window.innerHeight - cy);
+      const targetScale = (Math.hypot(maxDx, maxDy) / (rect.width / 2)) + 1.6;
+      appEnterBtn.style.setProperty('--ldr-expand-scale', targetScale.toFixed(2));
+
+      setLoaderStep(100, 'Membuka undangan...');
+      if (musicEnabled) {
+        prepareAudioElement();
+        await setMusicState(true, true);
+      }
+
+      appEnterBtn.classList.add('expand');
+
+      let done = false;
+      const finish = () => {
+        if (done) return;
+        done = true;
+        resolve();
+      };
+      appEnterBtn.addEventListener('animationend', finish, { once: true });
+      setTimeout(finish, 900);
+    };
+
+    appEnterBtn.addEventListener('click', onTap, { once: true });
+  });
+};
 
 /* Utils */
 const clamp = (v,a,b) => Math.min(b,Math.max(a,v));
@@ -767,6 +949,7 @@ const saveState = () => {
 };
 
 const addDelta = (d) => {
+  if (!appReady) return;
   if (zone === 0) {
     heroAccum = clamp(heroAccum+d, 0, HERO_TOTAL);
     heroTarget = heroAccum/HERO_TOTAL;
@@ -782,6 +965,7 @@ const addDelta = (d) => {
 };
 
 window.addEventListener('wheel', e=>{
+  if (!appReady) return;
   /* Jika main-content (undangan) sedang terbuka — biarkan scroll normal */
   if (mainContent.classList.contains('show')) return;
   e.preventDefault();
@@ -791,6 +975,7 @@ window.addEventListener('wheel', e=>{
 let touchY=null;
 window.addEventListener('touchstart',e=>{touchY=e.touches[0].clientY;},{passive:true});
 window.addEventListener('touchmove',e=>{
+  if (!appReady) return;
   if(touchY===null)return;
   if (mainContent.classList.contains('show')) return;
   e.preventDefault();
@@ -806,6 +991,7 @@ const isTypingElement = (el) => {
 };
 
 window.addEventListener('keydown',e=>{
+  if (!appReady) return;
   if (mainContent.classList.contains('show')) return;
   if (isTypingElement(e.target) || isTypingElement(document.activeElement)) return;
   const map={ArrowDown:60,ArrowUp:-60,PageDown:300,PageUp:-300,' ':150,Space:150,Spacebar:150};
@@ -864,6 +1050,7 @@ btnBack.addEventListener('click', () => {
 });
 
 function openInvite() {
+  ensureMainContentAssets();
   mainContent.classList.add('show');
   document.body.classList.add('invite-open');
   document.documentElement.classList.add('invite-open-boot');
@@ -891,22 +1078,44 @@ btnDown.addEventListener('click', () => {
   openInvite();
 });
 
-render();
-if (document.documentElement.classList.contains('journey-open-boot')) {
-  requestAnimationFrame(() => {
-    document.documentElement.classList.remove('journey-open-boot');
-  });
-}
-requestAnimationFrame(() => {
-  document.documentElement.classList.remove('scene-boot');
-});
+const restoreSavedViewState = () => {
+  if (_savedState.inviteOpen) {
+    ensureMainContentAssets();
+    mainContent.classList.add('show');
+    document.body.classList.add('invite-open');
+    document.documentElement.classList.add('invite-open-boot');
+    renderComments();
+  }
+};
 
-if (_savedState.inviteOpen) {
-  mainContent.classList.add('show');
-  document.body.classList.add('invite-open');
-  document.documentElement.classList.add('invite-open-boot');
-  renderComments();
-}
+const startApp = () => {
+  appReady = true;
+  restoreSavedViewState();
+  render();
+  initMusic(); /* dipanggil di sini — loader sudah hilang, gesture user bisa diterima */
+
+  if (document.documentElement.classList.contains('journey-open-boot')) {
+    requestAnimationFrame(() => {
+      document.documentElement.classList.remove('journey-open-boot');
+    });
+  }
+  requestAnimationFrame(() => {
+    document.documentElement.classList.remove('scene-boot');
+  });
+};
+
+const bootApp = async () => {
+  try {
+    await waitEssentialAssets();
+    await waitForLoaderTap();
+  } finally {
+    hideLoader();
+    document.documentElement.classList.remove('app-loading');
+    document.documentElement.classList.add('app-ready');
+    startApp();
+  }
+};
+bootApp();
 
 /* ── Copy to clipboard (rekening) ── */
 function copyGift(elId, btn) {

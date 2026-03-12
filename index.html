@@ -7,6 +7,7 @@
   <script>
     (function restoreBootClass() {
       document.documentElement.classList.add('scene-boot');
+      document.documentElement.classList.add('app-loading');
       setTimeout(function () {
         document.documentElement.classList.remove('scene-boot');
       }, 2500);
@@ -20,6 +21,33 @@
       } catch (e) {}
     })();
   </script>
+  <style>
+    html.app-loading,
+    html.app-loading body { overflow: hidden; }
+    html.app-loading #appLoader {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      display: grid;
+      place-items: center;
+      background: #f1eee7;
+      visibility: visible;
+    }
+    html.app-loading #canvas,
+    html.app-loading #journeyCanvas,
+    html.app-loading #main-content,
+    html.app-loading .progress-bar,
+    html.app-loading .scroll-hint,
+    html.app-loading .btn-continue,
+    html.app-loading .btn-top,
+    html.app-loading .btn-down,
+    html.app-loading .btn-music,
+    html.app-loading #jHint,
+    html.app-loading #jDots {
+      visibility: hidden;
+    }
+    html.app-ready #appLoader { visibility: hidden; }
+  </style>
   <link rel="stylesheet" href="assets/css/styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,6 +57,66 @@
   </noscript>
 </head>
 <body>
+
+<div id="appLoader" role="status" aria-live="polite">
+
+  <!-- Partikel cahaya -->
+  <div class="ldr-particles" aria-hidden="true">
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+  </div>
+
+  <!-- Garis diagonal dekoratif -->
+  <div class="ldr-lines" aria-hidden="true">
+    <div class="ldr-line"></div>
+    <div class="ldr-line"></div>
+    <div class="ldr-line"></div>
+  </div>
+
+  <div class="ldr-body">
+
+    <!-- Ornamen atas -->
+    <div class="ldr-ornament-top" aria-hidden="true">
+      <span class="ldr-orn-line"></span>
+      <span class="ldr-orn-diamond">◇</span>
+      <span class="ldr-orn-line"></span>
+    </div>
+
+    <p class="ldr-eyebrow">Undangan Pernikahan</p>
+
+    <div class="ldr-names">
+      <span class="ldr-name ldr-name-left">Salsa</span>
+      <span class="ldr-name-amp">&amp;</span>
+      <span class="ldr-name ldr-name-right">Hadri</span>
+    </div>
+
+    <p class="ldr-date">8 April 2026</p>
+
+    <!-- Ornamen bawah -->
+    <div class="ldr-ornament-bot" aria-hidden="true">
+      <span class="ldr-orn-line"></span>
+      <span class="ldr-orn-diamond">◇</span>
+      <span class="ldr-orn-line"></span>
+    </div>
+
+    <!-- Progress -->
+    <div class="ldr-progress-wrap">
+      <div class="ldr-track" aria-hidden="true">
+        <span id="appLoaderBar"></span>
+      </div>
+      <p id="appLoaderText" class="ldr-status">Memuat elemen utama...</p>
+    </div>
+
+    <!-- Tombol masuk -->
+    <button id="appEnterBtn" class="ldr-enter-btn" type="button" disabled aria-disabled="true">
+      <span class="ldr-enter-ring" aria-hidden="true"></span>
+      <span class="ldr-enter-ring ldr-enter-ring--2" aria-hidden="true"></span>
+      <span class="ldr-enter-label">Masuk</span>
+    </button>
+
+  </div>
+</div>
 
 <div id="canvas">
   <div class="bg-paper"></div>
