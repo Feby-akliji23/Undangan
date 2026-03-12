@@ -38,7 +38,7 @@ const CONFIG = {
 
   /* ── Breakpoint viewport global ── */
   viewport: {
-    mobileBreakpoint: 768,
+    mobileBreakpoint: 1000,
   },
 
   /* ── Tombol musik + audio ── */
@@ -52,9 +52,9 @@ const CONFIG = {
 
   /* ── Bunga kiri atas — pojok dikunci CSS, scale/opacity dianimasikan ── */
   flowerTL: {
-    width:        'clamp(170px, 25vw, 260px)',  // lebar desktop
-    widthMobile:  'clamp(80px, 38vw, 290px)',  // lebar mobile (<768px)
-    scaleMul:     { mobile: 1.0, desktop: 1.0 }, // tuning responsive scale
+    width:        'clamp(200px, 25vw, 360px)',  // lebar desktop
+    widthMobile:  'clamp(290px, 38vw, 400px)',  // lebar mobile (<768px)
+    scaleMul:     { mobile: 0.8, desktop: 1.0 }, // tuning responsive scale
     intro:  { scale: 1.0,  rotate:  0,  opacity: 1.0 },
     prayer: { scale: 1.0,  rotate:  0,  opacity: 1.0 },
   },
@@ -62,8 +62,8 @@ const CONFIG = {
   /* ── Bunga kanan atas ── */
   flowerTR: {
     width:        'clamp(50px, 25vw, 160px)',  // lebar desktop
-    widthMobile:  'clamp(150px, 38vw, 190px)',  // lebar mobile (<768px)
-    scaleMul:     { mobile: 0.9, desktop: 1.0 }, // tuning responsive scale
+    widthMobile:  'clamp(190px, 38vw, 390px)',  // lebar mobile (<768px)
+    scaleMul:     { mobile: 0.8, desktop: 1.0 }, // tuning responsive scale
     intro:  { scale:1.0,   rotate:  0,  opacity: 1.0, },
     prayer: { scale: 1.0,  rotate:  0,  opacity: 1.0,},
   },
@@ -71,28 +71,28 @@ const CONFIG = {
   /* ── Bunga kiri bawah ── */
   flowerBL: {
     width:        'clamp(50px, 25vw, 160px)',  // lebar desktop
-    widthMobile:  'clamp(150px, 38vw, 190px)',  // lebar mobile (<768px)
-    scaleMul:     { mobile: 0.9, desktop: 1.0 }, // tuning responsive scale
+    widthMobile:   'clamp(190px, 38vw, 390px)',  // lebar mobile (<768px)
+    scaleMul:     { mobile: 0.8, desktop: 1.0 }, // tuning responsive scale
     intro:  { scale:1.0,   rotate:  0,  opacity: 1.0 },
     prayer: { scale: 1.0,  rotate:  0,  opacity: 1.0 },
   },
 
   /* ── Bunga kanan bawah ── */
   flowerBR: {
-    width:        'clamp(170px, 25vw, 260px)',  // lebar desktop
-    widthMobile:  'clamp(150px, 38vw, 190px)',  // lebar mobile (<768px)
-    scaleMul:     { mobile: 0.9, desktop: 1.0 }, // tuning responsive scale
+    width:        'clamp(200px, 25vw, 360px)',  // lebar desktop
+    widthMobile:  'clamp(290px, 38vw, 400px)',  // lebar mobile (<768px)
+    scaleMul:     { mobile: 0.8, desktop: 1.0 }, // tuning responsive scale
     intro:  { scale:1.0,   rotate:  0,  opacity: 1.0 },
     prayer: { scale: 1.0,  rotate:  0,  opacity: 1.0 },
   },
 
   /* ── Burung — x/y = posisi tengah dalam % layar ── */
   birds: {
-    width:          '62%',   // lebar di desktop
-    widthMobile:    '92%',   // lebar di mobile (<768px)
-    scaleMul:       { mobile: 0.96, desktop: 1.0 }, // tuning responsive scale
-    intro:  { x: 50,  y: 30,  scale: 1.0,  rotate:  0,  opacity: 1.0 },
-    prayer: { x: 50,  y: 82,  scale: 2.05, rotate:  0,  opacity: 1.0 },
+    width:          '50%',   // lebar di desktop
+    widthMobile:    '100%',   // lebar di mobile (<768px)
+    scaleMul:       { mobile: 1.0, desktop: 1.0 }, // tuning responsive scale
+    intro:  { x: 50,  y: 40,  scale: 1.0,  rotate:  0,  opacity: 1.0 },
+    prayer: { x: 50,  y: 82,  scale: 2.0, rotate:  0,  opacity: 1.0 },
   },
 
   /* ── Teks intro (nama & tanggal) ── */
@@ -545,7 +545,7 @@ const applyFree = (el, state) => {
    ease      : 'inOut' | 'out' | 'in' | 'linear'
    ════════════════════════════════════════════════════ */
 const JOURNEY = {
-  totalVirtualPx: 20000,  // total virtual scroll untuk semua journey (lebih besar = lebih lambat & smooth)
+  totalVirtualPx: 10000,  // total virtual scroll untuk semua journey (lebih besar = lebih lambat & smooth)
 
   chapters: [
     /* ── Chapter 1: Pertemuan ── */
