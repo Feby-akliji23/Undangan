@@ -110,7 +110,7 @@ const CONFIG = {
     scaleMul:       { mobile: 0.96, desktop: 1.0 }, // tuning responsive scale
     intro:  { x: 50,  y: 55,  scale: 0.95, rotate:  0,  opacity: 0.0 },
     //                                              ↑ mulai tidak terlihat
-    prayer: { x: 50,  y: 40,  scale: 1.0,  rotate:  0,  opacity: 1.0 },
+    prayer: { x: 50,  y: 45,  scale: 1.0,  rotate:  0,  opacity: 1.0 },
   },
 
   /* ── Timeline: [start, end] dalam 0.0–1.0 progress scroll ── */
@@ -178,6 +178,7 @@ const appLoader   = document.getElementById('appLoader');
 const appLoaderBar  = document.getElementById('appLoaderBar');
 const appLoaderText = document.getElementById('appLoaderText');
 const appEnterBtn  = document.getElementById('appEnterBtn');
+const appEnterLabel = appEnterBtn ? appEnterBtn.querySelector('.ldr-enter-label') : null;
 const mainContent = document.getElementById('main-content');
 const btnBack     = document.getElementById('btnBack');
 
@@ -365,8 +366,12 @@ const CSS_LINK_SELECTOR = 'link[rel="stylesheet"][href*="assets/css/styles.css"]
 const URL_RE = /url\((['"]?)(.*?)\1\)/;
 
 const setLoaderStep = (pct, text) => {
-  if (appLoaderBar) appLoaderBar.style.width = `${Math.max(0, Math.min(100, pct))}%`;
+  const safePct = Math.max(0, Math.min(100, pct));
+  if (appLoaderBar) appLoaderBar.style.width = `${safePct}%`;
   if (appLoaderText && text) appLoaderText.textContent = text;
+  if (appEnterLabel && appEnterBtn && !appEnterBtn.classList.contains('is-ready')) {
+    appEnterLabel.textContent = `${Math.round(safePct)}%`;
+  }
 };
 
 const withTimeout = (promise, ms = BOOT_TIMEOUT_MS) =>
@@ -463,6 +468,7 @@ const waitForLoaderTap = () => {
     appEnterBtn.disabled = false;
     appEnterBtn.setAttribute('aria-disabled', 'false');
     appEnterBtn.classList.add('is-ready');
+    if (appEnterLabel) appEnterLabel.textContent = 'Masuk';
     setLoaderStep(100, 'Siap — sentuh untuk masuk');
 
     const onTap = async () => {

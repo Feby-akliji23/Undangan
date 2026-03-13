@@ -5,13 +5,13 @@
       --paper:#f6f5f2;
 
       /* ── Journey tuning (mobile default) ── */
-      --journey-title-size: clamp(.64rem, 2.9vw, .9rem);
-      --journey-dialog-size: clamp(.9rem, 3.6vw, 1.08rem);
-      --journey-dialog-date-size: clamp(.58rem, 2.35vw, .74rem);
-      --journey-dialog-width: min(250px, 72vw);
-      --journey-dialog-pad-y: clamp(8px, 2.5vw, 12px);
-      --journey-dialog-pad-x: clamp(10px, 2.9vw, 14px);
-      --journey-btn-font-size: clamp(.62rem, 2.4vw, .84rem);
+      --journey-title-size: clamp(.82rem, 3.4vw, 1rem);
+      --journey-dialog-size: clamp(1rem, 4vw, 1.24rem);
+      --journey-dialog-date-size: clamp(.68rem, 2.7vw, .82rem);
+      --journey-dialog-width: min(280px, 80vw);
+      --journey-dialog-pad-y: clamp(10px, 2.8vw, 14px);
+      --journey-dialog-pad-x: clamp(12px, 3.1vw, 16px);
+      --journey-btn-font-size: clamp(.72rem, 2.8vw, .9rem);
       --journey-btn-pad-y: .65rem;
       --journey-btn-pad-x: 2rem;
       --music-btn-size: clamp(40px, 9vw, 48px);
@@ -315,7 +315,7 @@
     .txt-intro { color:#111; text-shadow:0 4px 14px rgba(255,255,255,.5); }
     .intro-eyebrow {
       font-family:"Cinzel",serif; text-transform:uppercase;
-      letter-spacing:.18em; font-size:clamp(.6rem,1.4vw,.9rem);
+      letter-spacing:.18em; font-size:clamp(.72rem,2.2vw,1rem);
     }
     .intro-title {
       margin:clamp(.35rem,1.5vw,.9rem) 0; font-style:italic; font-weight:500;
@@ -324,18 +324,18 @@
     .intro-and { display:block; margin:.07em 0; font-size:.58em; font-style:normal; }
     .intro-date {
       font-family:"Cinzel",serif; letter-spacing:.16em;
-      text-transform:uppercase; font-size:clamp(.68rem,1.3vw,1.1rem);
+      text-transform:uppercase; font-size:clamp(.9rem,2.8vw,1.18rem);
     }
     .intro-place {
       margin-top:clamp(.3rem,.9vw,.7rem);
-      letter-spacing:.12em; font-size:clamp(.82rem,1.3vw,1.1rem);
+      letter-spacing:.12em; font-size:clamp(1rem,2.9vw,1.2rem);
     }
     .txt-prayer { }
     .prayer-ring { width:clamp(80px,12vw,140px); margin:0 auto clamp(.35rem,1vw,.8rem); }
     .prayer-ring img { width:100%; height:auto; animation:floatOrn 8s ease-in-out infinite; }
     .prayer-ornament {
       font-family:"Cinzel",serif; text-transform:uppercase;
-      letter-spacing:.14em; color:var(--gold); font-size:clamp(.64rem,1.1vw,.92rem);
+      letter-spacing:.14em; color:var(--gold); font-size:clamp(.78rem,2.2vw,.98rem);
       display:inline-flex; align-items:center; gap:.7rem;
       margin-bottom:clamp(.7rem,1.5vw,1.2rem);
     }
@@ -343,15 +343,15 @@
       content:""; width:clamp(24px,5vw,64px); height:1px;
       background:linear-gradient(90deg,transparent,#c49f64,transparent);
     }
-    .txt-prayer p:not(.prayer-ornament) { margin:0; font-size:clamp(1rem,2vw,1.65rem); line-height:1.18; }
-    .txt-prayer p+p:not(.prayer-ornament) { margin-top:clamp(.65rem,1.4vw,1.1rem); font-size:clamp(.92rem,1.7vw,1.38rem); line-height:1.22; }
+    .txt-prayer p:not(.prayer-ornament) { margin:0; font-size:clamp(1.08rem,3.1vw,1.65rem); line-height:1.18; }
+    .txt-prayer p+p:not(.prayer-ornament) { margin-top:clamp(.65rem,1.4vw,1.1rem); font-size:clamp(1rem,2.8vw,1.38rem); line-height:1.22; }
 
     /* UI */
     .progress-bar { position:fixed; bottom:0; left:0; height:2px; background:var(--gold); width:0%; z-index:100; }
     .scroll-hint {
       position:fixed; bottom:calc(20px + env(safe-area-inset-bottom,0px)); left:50%; transform:translateX(-50%);
       z-index:99; display:flex; flex-direction:column; align-items:center; gap:6px;
-      font-family:"Cinzel",serif; font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; color:#666;
+      font-family:"Cinzel",serif; font-size:clamp(.7rem,2.4vw,.84rem); letter-spacing:.18em; text-transform:uppercase; color:#666;
     }
     .hint-line { width:1px; height:36px; background:linear-gradient(to bottom,var(--gold),transparent); animation:hintPulse 1.8s ease-in-out infinite; }
     @keyframes hintPulse { 0%,100%{opacity:.7;transform:scaleY(1)} 50%{opacity:.3;transform:scaleY(.5)} }
@@ -619,7 +619,7 @@
     .mc-back-btn {
       pointer-events:auto;
       display:inline-flex; align-items:center; gap:.45em;
-      font-family:"Cinzel",serif; font-size:clamp(.6rem,.85vw,2rem);
+      font-family:"Cinzel",serif; font-size:clamp(.72rem,.8vw,.92rem);
       text-transform:uppercase; letter-spacing:.16em;
       color:#6b5d46;
       background: rgba(255,252,244,.85);
@@ -687,7 +687,7 @@
     /* Section title */
     .mc-section-title {
       font-family:"Cormorant Garamond",serif;
-      font-size: clamp(2rem, 4vw, 3.1rem);
+      font-size: clamp(2.15rem, 7.2vw, 3.2rem);
       font-weight:500; font-style:italic;
       line-height:.92;
       color:#2a2520;
@@ -698,7 +698,7 @@
     /* Lead text */
     .mc-lead {
       margin-top: clamp(12px,2vh,20px);
-      font-size: clamp(.8rem,1.5vw,2.22rem);
+      font-size: clamp(1rem,1.9vw,1.22rem);
       line-height:1.65;
       color:rgba(58,50,38,.75);
       text-align:center;
@@ -714,14 +714,14 @@
     }
     .mc-name {
       font-family:"Cormorant Garamond",serif;
-      font-size: clamp(2rem,5.5vw,4rem);
+      font-size: clamp(2.2rem,8vw,4.2rem);
       font-weight:500; font-style:italic;
       color:#2a2520; line-height:.88;
       margin: clamp(30px,1vh,50px) 0 clamp(40px,3vh,60px);
     }
     .mc-name-amp {
       font-family:"Cormorant Garamond",serif;
-      font-size: clamp(1.3rem,2.3vw,2.3rem);
+      font-size: clamp(1.5rem,3.6vw,2.5rem);
       color: var(--gold);
       font-style:italic;
     }
@@ -754,13 +754,13 @@
     }
     .mc-event-label {
       font-family:"Cinzel",serif;
-      font-size: clamp(.56rem,.55vw,.78rem);
+      font-size: clamp(.75rem,.9vw,.9rem);
       text-transform:uppercase; letter-spacing:.2em;
       color: var(--mc-accent);
     }
     .mc-event-time {
       font-family:"Cormorant Garamond",serif;
-      font-size: clamp(1.45rem,2.6vw,2.1rem);
+      font-size: clamp(1.4rem,4.2vw,2rem);
       font-style:italic; line-height:1;
       color:#2a2520;
     }
@@ -771,7 +771,7 @@
     }
     .mc-event-detail {
       font-family:"Cormorant Garamond",serif;
-      font-size: clamp(.8rem,1.05vw,1.16rem);
+      font-size: clamp(1.02rem,2.4vw,1.22rem);
       line-height:1.3; color:rgba(58,50,38,.78);
     }
     .mc-event-detail strong { font-weight:600; color:#2a2520; }
@@ -779,7 +779,7 @@
       display:inline-flex; align-items:center; gap:.4em;
       margin-top:clamp(4px,.8vh,8px);
       font-family:"Cinzel",serif;
-      font-size: clamp(.62rem,.5vw,.8rem);
+      font-size: clamp(.74rem,1.6vw,.9rem);
       text-transform:uppercase; letter-spacing:.16em;
       color: var(--mc-accent);
       border: 1px solid var(--mc-border-strong);
@@ -859,7 +859,7 @@
     .mc-gift-icon svg { width:1.1em; height:1.1em; stroke:var(--mc-accent); fill:none; }
     .mc-gift-name {
       font-family:"Cormorant Garamond",serif;
-      font-size: clamp(.81rem,1.05vw,1.28rem);
+      font-size: clamp(1rem,2.4vw,1.34rem);
       font-style:italic;
       color:#2a2520;
     }
@@ -878,7 +878,7 @@
     .mc-gift-number {
       flex:1;
       font-family:"Cormorant Garamond",serif;
-      font-size: clamp(.7rem,1.2vw,1.12rem);
+      font-size: clamp(.92rem,2.5vw,1.16rem);
       letter-spacing:.04em; color:#2a2520;
     }
     .mc-gift-copy {
@@ -913,7 +913,7 @@
       border-radius:4px;
       padding: .65em .8em;
       font-family:"Cormorant Garamond",serif;
-      font-size: clamp(.92rem,1vw,1.06rem);
+      font-size: clamp(1rem,2.5vw,1.12rem);
       color:#2a2520;
       outline:none;
       transition: border-color .25s;
@@ -930,7 +930,7 @@
       border-radius:4px;
       padding: .8em 1em;
       font-family:"Cormorant Garamond",serif;
-      font-size: clamp(.92rem,1vw,1.06rem);
+      font-size: clamp(1rem,2.5vw,1.12rem);
       color:#2a2520; line-height:1.55;
       outline:none;
       transition: border-color .25s;
@@ -942,7 +942,7 @@
     .mc-submit-btn {
       align-self:flex-start;
       font-family:"Cinzel",serif;
-      font-size: clamp(.62rem,.55vw,.78rem);
+      font-size: clamp(.74rem,1.5vw,.9rem);
       text-transform:uppercase; letter-spacing:.2em;
       color:#5a554d;
       background: rgba(255,255,255,.92);
@@ -970,7 +970,7 @@
       padding-top:clamp(24px,5vh,48px);
       text-align:center;
       font-family:"Cinzel",serif;
-      font-size: clamp(.6rem,.52vw,.78rem);
+      font-size: clamp(.74rem,1.5vw,.9rem);
       text-transform:uppercase; letter-spacing:.12em;
       color:rgba(110,105,95,.45);
     }
@@ -992,21 +992,21 @@
     }
     .comment-bubble-name {
       font-family:"Cormorant Garamond",serif;
-      font-size: clamp(.82rem,.95vw,1.05rem);
+      font-size: clamp(1rem,2.4vw,1.14rem);
       font-weight:700; letter-spacing:.05em;
       text-transform:capitalize; color:#2a2520;
       margin-bottom:.15rem;
     }
     .comment-bubble-date {
       font-family:"Cinzel",serif;
-      font-size: clamp(.58rem,.5vw,.75rem);
+      font-size: clamp(.7rem,1.4vw,.82rem);
       letter-spacing:.08em; text-transform:uppercase;
       color:rgba(110,105,95,.62);
       margin-bottom:.3rem;
     }
     .comment-bubble-text {
       font-family:"Cormorant Garamond",serif;
-      font-size: clamp(.95rem,1vw,1.08rem);
+      font-size: clamp(1.02rem,2.5vw,1.14rem);
       line-height:1.55; color:rgba(42,37,32,.85);
     }
 
@@ -1269,9 +1269,76 @@
       position:fixed; bottom:calc(18px + env(safe-area-inset-bottom,0px));
       left:50%; transform:translateX(-50%); z-index:20;
       display:flex; flex-direction:column; align-items:center; gap:5px;
-      font-family:"Cinzel",serif; font-size:.58rem; letter-spacing:.18em;
+      font-family:"Cinzel",serif; font-size:clamp(.68rem,2.2vw,.82rem); letter-spacing:.18em;
       text-transform:uppercase; color:rgba(255,255,255,.6);
       opacity:0; transition:opacity .4s;
+    }
+
+    /* Mobile tuning: loader + hero text lebih besar */
+    @media (max-width: 767px) {
+      .ldr-eyebrow { font-size:clamp(.68rem,2.9vw,.82rem); }
+      .ldr-name { font-size:clamp(3.4rem,14vw,5.1rem); }
+      .ldr-name-amp { font-size:clamp(1.4rem,5vw,2rem); }
+      .ldr-date { font-size:clamp(.75rem,2.8vw,.92rem); }
+      .ldr-status { font-size:clamp(.62rem,2.5vw,.76rem); }
+      .ldr-enter-label { font-size:clamp(.74rem,3vw,.92rem); }
+
+      .intro-eyebrow { font-size:clamp(.9rem,3.2vw,1.1rem); }
+      .intro-title { font-size:clamp(3.3rem,14vw,4.7rem); }
+      .intro-date { font-size:clamp(1.05rem,3.8vw,1.3rem); }
+      .intro-place { font-size:clamp(1.1rem,4.1vw,1.35rem); }
+      .prayer-ornament { font-size:clamp(.9rem,3.2vw,1.06rem); }
+      .txt-prayer p:not(.prayer-ornament) { font-size:clamp(1.2rem,4.2vw,1.62rem); }
+      .txt-prayer p+p:not(.prayer-ornament) { font-size:clamp(1.08rem,3.7vw,1.4rem); }
+    }
+
+    /* Tablet tuning */
+    @media (min-width: 768px) and (max-width: 1023px) {
+      :root {
+        --journey-title-size: clamp(1.08rem, 2.5vw, 1.45rem);
+        --journey-dialog-size: clamp(1.24rem, 2.8vw, 1.7rem);
+        --journey-dialog-date-size: clamp(.86rem, 1.8vw, 1.08rem);
+        --journey-dialog-width: min(560px, 64vw);
+        --journey-dialog-pad-y: clamp(12px, 2vw, 20px);
+        --journey-dialog-pad-x: clamp(16px, 2.3vw, 24px);
+        --journey-btn-font-size: clamp(.84rem, 1.55vw, 1rem);
+        --journey-btn-pad-y: .74rem;
+        --journey-btn-pad-x: 2.3rem;
+      }
+
+      .ldr-eyebrow { font-size:clamp(.78rem,1.6vw,.95rem); }
+      .ldr-date { font-size:clamp(.86rem,1.6vw,1.04rem); }
+      .ldr-status { font-size:clamp(.72rem,1.5vw,.86rem); }
+      .ldr-enter-label { font-size:clamp(.82rem,1.6vw,.98rem); }
+
+      .intro-eyebrow { font-size:clamp(.98rem,1.75vw,1.18rem); }
+      .intro-date    { font-size:clamp(1.1rem,1.9vw,1.32rem); }
+      .intro-place   { font-size:clamp(1.18rem,2vw,1.4rem); }
+      .prayer-ornament { font-size:clamp(.98rem,1.7vw,1.16rem); }
+
+      .txt-prayer p:not(.prayer-ornament) {
+        font-size:clamp(1.3rem,2.4vw,1.76rem);
+      }
+      .txt-prayer p+p:not(.prayer-ornament) {
+        font-size:clamp(1.16rem,2.1vw,1.5rem);
+      }
+
+      .mc-section-title { font-size:clamp(2.45rem,5.6vw,3.35rem); }
+      .mc-lead { font-size:clamp(1.12rem,2vw,1.3rem); }
+      .mc-name { font-size:clamp(2.9rem,8.4vw,4.4rem); }
+      .mc-name-amp { font-size:clamp(1.8rem,3.2vw,2.6rem); }
+      .mc-event-label { font-size:clamp(.86rem,1.2vw,1rem); }
+      .mc-event-time { font-size:clamp(1.7rem,3.2vw,2.25rem); }
+      .mc-event-detail { font-size:clamp(1.1rem,1.8vw,1.3rem); }
+      .mc-maps-btn { font-size:clamp(.84rem,1.2vw,1rem); }
+      .mc-gift-name { font-size:clamp(1.12rem,1.7vw,1.38rem); }
+      .mc-gift-number { font-size:clamp(1rem,1.7vw,1.22rem); }
+      .mc-input, .mc-textarea { font-size:clamp(1.05rem,1.6vw,1.16rem); }
+      .mc-submit-btn { font-size:clamp(.82rem,1.2vw,.96rem); }
+      .mc-comment-empty { font-size:clamp(.82rem,1.2vw,.96rem); }
+      .comment-bubble-name { font-size:clamp(1.08rem,1.8vw,1.2rem); }
+      .comment-bubble-date { font-size:clamp(.76rem,1.1vw,.9rem); }
+      .comment-bubble-text { font-size:clamp(1.08rem,1.7vw,1.18rem); }
     }
     #jHint.show { opacity:1; }
     #jHint .hint-line { background:linear-gradient(to bottom,rgba(255,210,100,.7),transparent); }
