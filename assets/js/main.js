@@ -338,7 +338,7 @@ const JOURNEY = {
           desktop: { bgX:100, bgY:35, bgZoom:1.45,  fgX:42, fgY:100, fgXOrigin:0.5, fgYOrigin:0.66, fgScale:1.2, fgOpacity:0.0 },
           mobile:  { bgX:100, bgY:35, bgZoom:1.45, fgX:42, fgY:100, fgXOrigin:0.5, fgYOrigin:0.66, fgScale:1.08, fgOpacity:0.0 },
           dialog: {
-            text: 'Tak pernah kami sangka\ntakdir mempertemukan dua hati.',
+            text: 'Tak pernah kami sangka',
             desktop: { x: 20, y: 20, anchor: 'top-right', width: 'min(420px, 38vw)' },
             mobile:  { x: 50, y: 25, anchor: 'top-right', width: 'min(300px, 84vw)' }
           }
@@ -348,7 +348,7 @@ const JOURNEY = {
           desktop: { bgX:50, bgY:55, bgZoom:1.25, fgX:42, fgY:100, fgXOrigin:0.5, fgYOrigin:0.66, fgScale:1.3, fgOpacity:1.0 },
           mobile:  { bgX:50, bgY:55, bgZoom:1.25, fgX:50, fgY:50, fgXOrigin:0.5, fgYOrigin:0.5, fgScale:1.16, fgOpacity:1.0 },
           dialog: {
-            text: 'Tak pernah kami sangka\ntakdir mempertemukan dua hati.',
+            text: 'Takdir mempertemukan dua hati.',
             desktop: { x: 100, y: 20, anchor: 'center', width: 'min(420px, 38vw)' },
             mobile:  { x: 50,   y: 25,  anchor: 'center', width: 'min(300px, 84vw)' }
           }
