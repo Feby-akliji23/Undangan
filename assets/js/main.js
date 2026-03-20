@@ -462,7 +462,7 @@ const JOURNEY = {
         },
         {
           scroll: 760, ease:'inOut',
-          desktop: { bgX:0, bgY:0, bgZoom:1.60, fgX:50,fgY:100,fgXOrigin:0.5,fgYOrigin:0.75,fgScale:1.05,fgOpacity:1.0, fg2X:30, fg2Y:10, fg2XOrigin:1, fg2YOrigin:0, fg2Scale:0.7, fg2Opacity:0.86 },
+          desktop: { bgX:0, bgY:0, bgZoom:1.60, fgX:50,fgY:100,fgXOrigin:0.5,fgYOrigin:0.75,fgScale:1.1,fgOpacity:1.0, fg2X:30, fg2Y:10, fg2XOrigin:1, fg2YOrigin:0, fg2Scale:0.7, fg2Opacity:0.86 },
           mobile:  { bgX:0, bgY:0, bgZoom:1.60, fgX:50, fgY:100, fgXOrigin:0.5, fgYOrigin:0.95, fgScale:1.1, fgOpacity:1.0, fg2X:70, fg2Y:8, fg2XOrigin:1, fg2YOrigin:0.3, fg2Scale:1, fg2Opacity:1 },
           dialog: {
             text: 'Untuk mengikat janji, untuk berjalan bersama hari ini, esok, dan selamanya.',
