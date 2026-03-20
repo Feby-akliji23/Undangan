@@ -235,7 +235,7 @@ const HERO_SCENE = {
             dialog: { style: 'hero-intro', desktop: { x: 50, y: 50, anchor: 'center' }, mobile: { x: 50, y: 50, anchor: 'center' } },
           },
           mobile: {
-            bgX: 50, bgY: 60, bgZoom: 1.16,
+            bgX: 50, bgY: 50, bgZoom: 1,
             fgX: 50,  fgY: 50, fgXOrigin: 0.5, fgYOrigin: 0.5, fgScale: 1.2,  fgOpacity: 1.0,
             fg2X: 0, fg2Y: 0, fg2XOrigin: 0, fg2YOrigin: 0, fg2Scale: 0.8,  fg2Opacity: 1.0,
             fg3X: 100, fg3Y: 0, fg3XOrigin: 1, fg3YOrigin: 0, fg3Scale: 0.8,  fg3Opacity: 1.0,
@@ -259,7 +259,7 @@ const HERO_SCENE = {
             dialog: { style: 'hero-prayer', desktop: { x: 50, y: 50, anchor: 'center' }, mobile: { x: 50, y: 50, anchor: 'center' } },
           },
           mobile: {
-            bgX: 50, bgY: 45, bgZoom: 1.12,
+            bgX: 50, bgY: 50, bgZoom: 1,
             fgX: 100,  fgY: 60, fgXOrigin: 1, fgYOrigin: 0, fgScale: 1.2,  fgOpacity: 1.0,
             fg2X: 0, fg2Y: 0, fg2XOrigin: 0, fg2YOrigin: 0, fg2Scale: 0.7,  fg2Opacity: 1.0,
             fg3X: 100, fg3Y: 0, fg3XOrigin: 1, fg3YOrigin: 0, fg3Scale: 0.7,  fg3Opacity: 1.0,
@@ -283,7 +283,7 @@ const HERO_SCENE = {
             dialog: { style: 'hero-prayer', desktop: { x: 50, y: 50, anchor: 'center' }, mobile: { x: 50, y: 50, anchor: 'center' } },
           },
           mobile: {
-            bgX: 50, bgY: 60, bgZoom: 1.04,
+            bgX: 50, bgY: 50, bgZoom: 1,
             fgX: 80,  fgY: 10, fgXOrigin: 1, fgYOrigin: 0, fgScale: 3.0,  fgOpacity: 1.0,
             fg2X: 0, fg2Y: 0, fg2XOrigin: 0, fg2YOrigin: 0, fg2Scale: 0.9,  fg2Opacity: 1.0,
             fg3X: 100, fg3Y: 0, fg3XOrigin: 1, fg3YOrigin: 0, fg3Scale: 0.9,  fg3Opacity: 1.0,
@@ -323,20 +323,10 @@ const JOURNEY = {
     /* ── Chapter 1: Pertemuan ── */
     {
       movements: [
-        // {
-        //   scroll: 240, ease:'out',
-        //   desktop: { bgX:0, bgY:0, bgZoom:1.60, fgX:50, fgY:100, fgXOrigin:0.5, fgYOrigin:0.88, fgScale:1.0, fgOpacity:0.0 },
-        //   mobile:  { bgX:0, bgY:0, bgZoom:1.60, fgX:50, fgY:100, fgXOrigin:0.5, fgYOrigin:0.88, fgScale:0.94, fgOpacity:0.0 },
-        //   dialog: {
-        //     text: 'Di tempat yang penuh kesibukan,\nMorowali.',
-        //     desktop: { x: 50, y: 50, anchor: 'center', width: 'min(520px, 38vw)' },
-        //     mobile:  { x: 50, y: 25, anchor: 'top-left', width: 'min(300px, 84vw)' }
-        //   }
-        // },
         {
-          scroll: 240, ease:'inOut',
-          desktop: { bgX:100, bgY:35, bgZoom:1.45,  fgX:42, fgY:100, fgXOrigin:0.5, fgYOrigin:0.66, fgScale:1.2, fgOpacity:0.0 },
-          mobile:  { bgX:100, bgY:35, bgZoom:1.45, fgX:42, fgY:100, fgXOrigin:0.5, fgYOrigin:0.66, fgScale:1.08, fgOpacity:0.0 },
+          scroll: 340, ease:'out',
+          desktop: { bgX:0, bgY:0, bgZoom:1.60, fgX:50, fgY:100, fgXOrigin:0.5, fgYOrigin:0.88, fgScale:1.0, fgOpacity:0.0 },
+          mobile:  { bgX:20, bgY:0, bgZoom:1.5, fgX:50, fgY:100, fgXOrigin:0.5, fgYOrigin:0.88, fgScale:0.94, fgOpacity:0.0 },
           dialog: {
             text: 'Tak pernah kami sangka',
             desktop: { x: 20, y: 20, anchor: 'top-right', width: 'min(420px, 38vw)' },
@@ -344,9 +334,19 @@ const JOURNEY = {
           }
         },
         {
-          scroll: 720, ease:'inOut', 
+          scroll: 540, ease:'inOut',
+          desktop: { bgX:100, bgY:35, bgZoom:1.45,  fgX:42, fgY:100, fgXOrigin:0.5, fgYOrigin:0.66, fgScale:1.2, fgOpacity:0.0 },
+          mobile:  { bgX:100, bgY:35, bgZoom: 1, fgX:0, fgY:50, fgXOrigin:1, fgYOrigin:0.5,  fgScale:1.16, fgOpacity:0.0 },
+          dialog: {
+            text: 'Tak pernah kami sangka',
+            desktop: { x: 20, y: 20, anchor: 'top-right', width: 'min(420px, 38vw)' },
+            mobile:  { x: 50, y: 25, anchor: 'top-right', width: 'min(300px, 84vw)' }
+          }
+        },
+        {
+          scroll: 520, ease:'inOut', 
           desktop: { bgX:50, bgY:55, bgZoom:1.25, fgX:42, fgY:100, fgXOrigin:0.5, fgYOrigin:0.66, fgScale:1.3, fgOpacity:1.0 },
-          mobile:  { bgX:50, bgY:55, bgZoom:1.25, fgX:50, fgY:50, fgXOrigin:0.5, fgYOrigin:0.5, fgScale:1.16, fgOpacity:1.0 },
+          mobile:  { bgX:50, bgY:55, bgZoom: 1.5, fgX:50, fgY:50, fgXOrigin:0.5, fgYOrigin:0.5, fgScale:1.16, fgOpacity:1.0 },
           dialog: {
             text: 'Takdir mempertemukan dua hati.',
             desktop: { x: 100, y: 20, anchor: 'center', width: 'min(420px, 38vw)' },
@@ -356,7 +356,7 @@ const JOURNEY = {
         {
           scroll: 260, ease:'in',
           desktop: { bgX:50, bgY:50, bgZoom:1.08, fgX:50, fgY:100, fgXOrigin:0.5, fgYOrigin:0.78, fgScale:1.2, fgOpacity:0.7 },
-          mobile:  { bgX:50, bgY:50, bgZoom:1.08, fgX:50, fgY:100, fgXOrigin:0.5, fgYOrigin:0.78, fgScale:1.08, fgOpacity:0.7 },
+          mobile:  { bgX:50, bgY:55, bgZoom: 1.5, fgX:50, fgY:50, fgXOrigin:0.5, fgYOrigin:0.5, fgScale:1.3, fgOpacity:1.0 },
           dialog: null
         },
       ],
@@ -367,28 +367,18 @@ const JOURNEY = {
       movements: [
         {
           scroll: 260, ease:'out',
-          desktop: { bgX:0, bgY:0, bgZoom:1.60, fgX:18,   fgY:85, fgXOrigin:0.5, fgYOrigin:0.35, fgScale:0.9, fgOpacity:0.0 },
-          mobile:  { bgX:0, bgY:0, bgZoom:1.60, fgX:18, fgY:85, fgXOrigin:0.5, fgYOrigin:0.35, fgScale:0.86, fgOpacity:0.0 },
+          desktop: { bgX:0, bgY:0, bgZoom:1.0, fgX:18,   fgY:85, fgXOrigin:0.5, fgYOrigin:0.35, fgScale:0.9, fgOpacity:0.0 },
+          mobile:  { bgX:0, bgY:0, bgZoom:1.0, fgX:18, fgY:85, fgXOrigin:0.5, fgYOrigin:0.35, fgScale:0.86, fgOpacity:0.0 },
           dialog: {
             text: 'lalu waktu pelan-pelan mengajarkan kami untuk saling mengenal, memahami, dan akhirnya memilih satu sama lain.',
             desktop: { x: 50, y: 50, anchor: 'center', width: 'min(520px, 38vw)' },
             mobile:  { x: 50, y: 50, anchor: 'center', width: 'min(300px, 84vw)' }
           }
         },
-        // {
-        //   scroll: 680, ease:'inOut',
-        //   desktop: { bgX:100, bgY:35, bgZoom:1.45, fgX:50,   fgY:75, fgXOrigin:0.5, fgYOrigin:0.35, fgScale:1.7,fgRotate:8, fgOpacity:1.0 },
-        //   mobile:  { bgX:100, bgY:35, bgZoom:1.45, fgX:70, fgY:70, fgXOrigin:0.5, fgYOrigin:0.7, fgScale:1.35, fgRotate:0, fgOpacity:1.0 },
-        //   dialog: {
-        //     text: 'Setiap percakapan, setiap pertemuan.',
-        //     desktop: { x: 94, y: 30, anchor: 'top-right', width: 'min(520px, 38vw)' },
-        //     mobile:  { x: 0, y: 50,  anchor: 'top-right', width: 'min(300px, 84vw)' }
-        //   }
-        // },
         {
           scroll: 700, ease:'inOut',
           desktop: { bgX:50, bgY:50, bgZoom:1.05, fgX:40, fgY:70, fgXOrigin:0.5, fgYOrigin:0.35, fgScale:1.4, fgRotate:8,  fgOpacity:1.0 },
-          mobile:  { bgX:50, bgY:50, bgZoom:1.05, fgX:50, fgY:50, fgXOrigin:0.5, fgYOrigin:0.5, fgScale:1.20, fgRotate:8, fgOpacity:1.0 },
+          mobile:  { bgX:50, bgY:50, bgZoom:1.0, fgX:50, fgY:50, fgXOrigin:0.5, fgYOrigin:0.5, fgScale:1.20, fgRotate:8, fgOpacity:1.0 },
           dialog: {
             text: 'menumbuhkan keyakinan bahwa ini bukan sekadar kebetulan, melainkan perjalanan yang memang ditakdirkan.',
             desktop: { x: 94, y: 30, anchor: 'top-right', width: 'min(520px, 38vw)' },
@@ -398,7 +388,7 @@ const JOURNEY = {
         {
           scroll: 240, ease:'in',
           desktop: { bgX:90, bgY:10, bgZoom:1.25, fgX:40, fgY:70, fgXOrigin:0.5, fgYOrigin:0.35, fgScale:1.4, fgRotate:8, fgOpacity:0.7 },
-          mobile:  { bgX:90, bgY:10, bgZoom:1.25, fgX:40, fgY:70, fgXOrigin:0.5, fgYOrigin:0.35, fgScale:1.18, fgRotate:8, fgOpacity:0.7 },
+          mobile:  { bgX:100, bgY:100, bgZoom:1.0, fgX:40, fgY:70, fgXOrigin:0.5, fgYOrigin:0.35, fgScale:1.18, fgRotate:8, fgOpacity:0.7 },
           dialog: null
         },
       ],
@@ -410,13 +400,17 @@ const JOURNEY = {
         {
           scroll: 100, ease:'out',
           desktop: { bgX:100, bgY:35, bgZoom:1.60,  fgX:0, fgY:50, fgXOrigin:0.5, fgYOrigin:1, fgScale:1.0, fgOpacity:0.0 },
-          mobile:  { bgX:100, bgY:35, bgZoom:1.60, fgX:0, fgY:50, fgXOrigin:0.5, fgYOrigin:1, fgScale:0.92, fgOpacity:0.0 },
-          dialog: null
+          mobile:  { bgX:100, bgY:0, bgZoom:1.5, fgX:0, fgY:100, fgXOrigin:1, fgYOrigin:1, fgScale:0.92, fgOpacity:0.0 },
+          dialog: {
+            text: 'Masalah dan tantangan datang, menguji, menguatkan, dan mendewasakan.',
+            desktop: { x: 50, y: 50, anchor: 'center', width: 'min(520px, 38vw)' },
+            mobile:  { x: 50, y: 50, anchor: 'center', width: 'min(300px, 84vw)' }
+          }
         },
         {
           scroll: 680, ease:'inOut',
           desktop: { bgX:100, bgY:35, bgZoom:1.08, fgX:0, fgY:100, fgXOrigin:0, fgYOrigin:0.7,  fgScale:1.0, fgOpacity:0.0 },
-          mobile:  { bgX:100, bgY:35, bgZoom:1.08, fgX:0, fgY:100, fgXOrigin:0, fgYOrigin:0.7, fgScale:0.92, fgOpacity:0.0 },
+          mobile:  { bgX:50, bgY:50, bgZoom:1.3, fgX:0, fgY:100, fgXOrigin:1, fgYOrigin:0.7, fgScale:0.92, fgOpacity:0.0 },
           dialog: {
             text: 'Masalah dan tantangan datang, menguji, menguatkan, dan mendewasakan.',
             desktop: { x: 50, y: 50, anchor: 'center', width: 'min(520px, 38vw)' },
@@ -441,7 +435,7 @@ const JOURNEY = {
         {
           scroll: 240, ease:'inOut',
           desktop: { bgX:100, bgY:100, bgZoom:1.20, fgX:50, fgY:100, fgXOrigin:0, fgYOrigin:0.7, fgScale:1.2,  fgOpacity:1.0 },
-          mobile:  { bgX:100, bgY:100, bgZoom:1.20, fgX:50, fgY:100, fgXOrigin:0, fgYOrigin:0.7, fgScale:1.04, fgOpacity:0.8 },
+          mobile:  { bgX:50, bgY:50, bgZoom:1.3, fgX:0, fgY:100, fgXOrigin:1, fgYOrigin:0.7, fgScale:0.92, fgOpacity:0.0 },
           dialog: null
         },
       ],
