@@ -948,6 +948,14 @@
       place-items: center;
       padding: clamp(28px, 6vh, 64px) clamp(20px, 5vw, 56px);
     }
+    @media (min-width: 768px) {
+      .mc-intro-cover {
+        background:
+          linear-gradient(180deg, rgba(12,11,10,.32), rgba(10,9,8,.44)),
+          radial-gradient(ellipse 120% 68% at 50% -8%, rgba(255,220,162,.12), transparent 65%),
+          url('../images/bg_main_content21.webp') top center / cover no-repeat;
+      }
+    }
     .mc-intro-cover::after {
       content: '';
       position: absolute;
@@ -1821,7 +1829,7 @@
     #jch4 .jhero-flower {
       position:absolute;
       height:auto;
-      animation:floatFlower 8.6s ease-in-out infinite;
+      animation: none !important;
       /* will-change dikelola JS secara dinamis */
       filter: var(--hero-flower-shadow);
     }
@@ -1855,6 +1863,7 @@
     }
     #jch4fg2.jfg-birds {
       z-index:7;
+      animation: none !important;
       width:clamp(280px, 44vw, 660px);
       height:auto;
       bottom:clamp(16px, 4.2vh, 52px);

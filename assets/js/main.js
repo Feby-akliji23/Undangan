@@ -28,7 +28,7 @@ const SUPABASE_ANON = 'sb_publishable_L9iRLeanmFIao2WenjnpqQ_JoyEh740';
            di semua device & frame rate
    ════════════════════════════════════════════════════ */
 const GSAP_CDN   = 'https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js';
-const TEMPUS_CDN = 'https://cdn.jsdelivr.net/npm/@studio-freight/tempus@0.0.24/dist/index.js';
+const TEMPUS_CDN = 'https://cdn.jsdelivr.net/npm/@studio-freight/tempus@0.0.44/dist/tempus.umd.js';
 const LENIS_CDN  = 'https://cdn.jsdelivr.net/npm/lenis@1.3.18/dist/lenis.min.js';
 
 let gsap   = null;
@@ -45,10 +45,10 @@ const loadPerf = () => Promise.all([
     document.head.appendChild(s);
   }),
   new Promise(res => {
-    if (window.Tempus) { Tempus = window.Tempus; res(); return; }
+    if (window.tempus) { Tempus = window.tempus; res(); return; }
     const s = document.createElement('script');
     s.src = TEMPUS_CDN;
-    s.onload  = () => { Tempus = window.Tempus || window.tempus; res(); };
+    s.onload  = () => { Tempus = window.tempus; res(); };
     s.onerror = () => res();
     document.head.appendChild(s);
   }),
@@ -96,7 +96,7 @@ const gs = (el, props) => {
 const CONFIG = {
 
   viewport: {
-    mobileBreakpoint: 1000,
+    mobileBreakpoint: 768,
   },
 
   music: {
@@ -114,8 +114,8 @@ const CONFIG = {
   */
   lenis: {
     wheelMultiplier: 1.0,
-    touchMultiplier: 1.45,
-    syncTouchLerp:   0.08,
+    touchMultiplier: 1.42,
+    syncTouchLerp:   0.07,
   },
 
   /* ── Animasi — tuning lerp hero/journey ──
@@ -151,10 +151,10 @@ const CONFIG = {
   */
   fallback: {
     wheelMult:        2.0,
-    touchMult:        1.2,
-    touchLimitMobile: 70,
+    touchMult:        1.1,
+    touchLimitMobile: 64,
     touchLimitDesktop:180,
-    deadzoneMobile:   1.4,
+    deadzoneMobile:   1.6,
     deadzoneDesktop:  0.8,
   },
 
@@ -1231,7 +1231,7 @@ const renderJourney = (jp) => {
 
   C.forEach((ch, ci) => {
     const jc = jChapters[ci];
-    const FADE = 0.015;
+    const FADE = 0.035;
     const chOp = ch._start === 0
       ? (jp < ch._end - FADE ? 1 : 1 - norm(jp, ch._end - FADE, ch._end + FADE))
       : jp < ch._start + FADE
@@ -1250,6 +1250,16 @@ const renderJourney = (jp) => {
     if (jc.bg)  { const v = visible ? 'background-size, background-position' : 'auto'; if (jc.bg.style.willChange  !== v) jc.bg.style.willChange  = v; }
     if (jc.fg)  { const v = visible ? 'transform, opacity' : 'auto'; if (jc.fg.style.willChange  !== v) jc.fg.style.willChange  = v; }
     if (jc.fg2) { const v = visible ? 'transform, opacity' : 'auto'; if (jc.fg2.style.willChange !== v) jc.fg2.style.willChange = v; }
+
+    /* Fix 3: Pause floatFlower CSS animation saat chapter tidak visible.
+       Ch4 punya 4 bunga dengan infinite animation + filter:drop-shadow —
+       membuat 4 GPU layer baru sekaligus saat masuk = frame drop.
+       Pause animasi saat invisible, resume saat mulai visible. */
+    if (ci === 3) {
+      const flowers = jc.el.querySelectorAll('.jhero-flower');
+      const pauseVal = visible ? 'running' : 'paused';
+      flowers.forEach(f => { if (f.style.animationPlayState !== pauseVal) f.style.animationPlayState = pauseVal; });
+    }
 
     /* Skip full render kalau chapter hampir tidak terlihat */
     if (!visible) return;
@@ -1363,7 +1373,7 @@ const initLenis = () => {
          lalu kita ambil via virtual-scroll event. */
       eventsTarget:    window,
       smoothWheel:     true,
-      syncTouch:       true,
+      smoothTouch:     true,       /* smooth dari scroll pertama, tanpa warm-up */
       syncTouchLerp:   CONFIG.lenis.syncTouchLerp,
       wheelMultiplier: CONFIG.lenis.wheelMultiplier,
       touchMultiplier: CONFIG.lenis.touchMultiplier,
@@ -1377,7 +1387,7 @@ const initLenis = () => {
     _lenis.on('virtual-scroll', ({ deltaY }) => {
       if (!appReady) return;
       if (mainContent.classList.contains('show')) return;
-      const deltaLimit = IS_MOBILE() ? 90 : 160;
+      const deltaLimit = IS_MOBILE() ? 64 : 160;
       const d = clamp(deltaY, -deltaLimit, deltaLimit);
       addDelta(d);
     });
@@ -1499,13 +1509,11 @@ const render = () => {
   const inJourney  = zone === 1 || jCur > 0.008;
   const inviteOpen = mainContent.classList.contains('show');
   const goingBack = jTarget < jCur || (zone === 0 && jCur > 0);
-  const fadeBackMul = IS_MOBILE() ? 36 : 42;
-  const fadeFwdMul = IS_MOBILE() ? 38 : 20;
+  const fadeBackMul = IS_MOBILE() ? 28 : 42;
+  const fadeFwdMul = IS_MOBILE() ? 28 : 20;
   const fade = clamp(jCur * (goingBack ? fadeBackMul : fadeFwdMul), 0, 1);
   const heroOpacity = clamp(1 - fade, 0, 1);
 
-  /* Opsi 2: display:none setelah fade-out selesai.
-     btnContinue dikontrol oleh renderJourney(), tidak di sini. */
   fadeToggle(btnTop,  inJourney && !inviteOpen);
   fadeToggle(btnDown, inJourney && !inviteOpen);
 
@@ -1528,14 +1536,20 @@ const render = () => {
   if (heroFlowerBL && heroFlowerBL.style.willChange !== heroWc)   heroFlowerBL.style.willChange = heroWc;
   if (heroFlowerBR && heroFlowerBR.style.willChange !== heroWc)   heroFlowerBR.style.willChange = heroWc;
 
+  /* Fix 2: Pre-activate journeyCanvas GPU layer saat hero sudah 80%
+     supaya compositor sudah siap saat transisi terjadi — tidak ada
+     frame drop akibat GPU layer baru dibuat di tengah animasi. */
+  const nearTransition = heroCur > 0.80 && zone === 0;
+  const journeyActive = inJourney || nearTransition;
+  journeyCanvas.classList.toggle('active', journeyActive);
+
   /* Canvas opacity — direct style, bukan GSAP */
   heroCanvas.style.opacity    = heroOpacity.toFixed(4);
   journeyCanvas.style.opacity = fade.toFixed(4);
-  journeyCanvas.classList.toggle('active', inJourney);
 
   scrollHint.style.display = inJourney ? 'none' : '';
 
-  if (inJourney) renderJourney(jCur);
+  if (inJourney || nearTransition) renderJourney(jCur);
   else setProgress(heroCur * 100);
 };
 
@@ -1681,6 +1695,19 @@ const startApp = () => {
   if (document.documentElement.classList.contains('journey-open-boot'))
     requestAnimationFrame(() => document.documentElement.classList.remove('journey-open-boot'));
   requestAnimationFrame(() => document.documentElement.classList.remove('scene-boot'));
+
+  /* GPU warm-up — paksa browser decode dan composite semua layer
+     sebelum user sempat scroll. Tanpa ini, frame pertama setelah
+     sentuh layar sering drop karena GPU baru mulai decode gambar.
+     Jalankan 6 frame render berturut-turut setelah app ready. */
+  if (IS_MOBILE()) {
+    let warmFrames = 0;
+    const warmUp = () => {
+      render();
+      if (++warmFrames < 6) requestAnimationFrame(warmUp);
+    };
+    requestAnimationFrame(warmUp);
+  }
 };
 const bootApp = async () => {
   try {
