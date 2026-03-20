@@ -1815,16 +1815,13 @@
       z-index:5;
       pointer-events:none;
     }
+    #jch4bg {
+      background-image: linear-gradient(160deg, #fffefb 0%, #fdf8f0 52%, #f7eee1 100%);
+      background-size: cover;
+      background-position: center center;
+    }
     #jch4bg::after {
-      content:'';
-      position:absolute;
-      inset:0;
-      pointer-events:none;
-      background:
-        radial-gradient(ellipse 80% 60% at 52% 20%, rgba(255,255,255,.92), transparent 55%),
-        radial-gradient(circle at 76% 16%, rgba(246,229,195,.28), transparent 50%),
-        radial-gradient(circle at 18% 82%, rgba(254,249,236,.56), transparent 54%);
-      opacity:.72;
+      display:none;
     }
     #jch4 .jhero-flower {
       position:absolute;

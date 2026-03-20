@@ -1209,13 +1209,22 @@ const ensureFgElLoaded = (fg) => {
   if (!dataSrc && !curSrc) { fg.dataset.loaded = '1'; return; }
   if (dataSrc && curSrc !== dataSrc) fg.setAttribute('src', dataSrc);
   else if (!curSrc) fg.setAttribute('src', dataSrc || curSrc);
+  /* Decode lebih awal agar saat chapter muncul tidak ada spike decode di frame kritis */
+  if (typeof fg.decode === 'function') {
+    try { fg.decode().catch(() => {}); } catch(e) {}
+  }
   fg.dataset.loaded = '1';
 };
 const ensureFgLoaded   = (idx) => { const jc = jChapters[idx]; if (!jc) return; ensureFgElLoaded(jc.fg); ensureFgElLoaded(jc.fg2); };
-const primeJourneyImages = (idx) => { ensureBgLoaded(idx); ensureBgLoaded(idx+1); ensureFgLoaded(idx); ensureFgLoaded(idx+1); };
+const primeJourneyImages = (idx) => {
+  /* Prime 2 chapter ke depan supaya transisi 3 → 4 sudah siap di mobile */
+  ensureBgLoaded(idx);   ensureFgLoaded(idx);
+  ensureBgLoaded(idx+1); ensureFgLoaded(idx+1);
+  ensureBgLoaded(idx+2); ensureFgLoaded(idx+2);
+};
 
 setTimeout(() => { jChapters.forEach(jc => { const src = _getBgSrc(jc.bg); if (src) _cacheBgNaturalSize(jc.bg, src); }); }, 0);
-ensureBgLoaded(0); ensureFgLoaded(0);
+primeJourneyImages(0);
 
 const renderJourney = (jp) => {
   const C = JOURNEY.chapters;
@@ -1231,7 +1240,7 @@ const renderJourney = (jp) => {
 
   C.forEach((ch, ci) => {
     const jc = jChapters[ci];
-    const FADE = 0.035;
+    const FADE = (IS_MOBILE() && (ci === 2 || ci === 3)) ? 0.018 : 0.035;
     const chOp = ch._start === 0
       ? (jp < ch._end - FADE ? 1 : 1 - norm(jp, ch._end - FADE, ch._end + FADE))
       : jp < ch._start + FADE
@@ -1259,6 +1268,10 @@ const renderJourney = (jp) => {
       const flowers = jc.el.querySelectorAll('.jhero-flower');
       const pauseVal = visible ? 'running' : 'paused';
       flowers.forEach(f => { if (f.style.animationPlayState !== pauseVal) f.style.animationPlayState = pauseVal; });
+      /* Saat transisi awal chapter 4 di mobile, tahan dekorasi bunga sebentar
+         agar overlap dengan chapter 3 lebih ringan */
+      const flowersWrap = jc.el.querySelector('.jhero-flowers');
+      if (flowersWrap) flowersWrap.style.opacity = (IS_MOBILE() && chOp < 0.28) ? '0' : '1';
     }
 
     /* Skip full render kalau chapter hampir tidak terlihat */
@@ -1273,14 +1286,21 @@ const renderJourney = (jp) => {
       ? eout(norm(t, clamp(toCfg.fgRevealStart, 0, 0.999), 1))
       : (toCfg.fgCutIn ? (t >= 0.999 ? 1 : 0) : t);
 
-    applyBg(jc.bg,
-      lerp(fromCfg.bgX    ?? 50, toCfg.bgX    ?? 50, t),
-      lerp(fromCfg.bgY    ?? 50, toCfg.bgY    ?? 50, t),
-      lerp(fromCfg.bgZoom ?? 1,  toCfg.bgZoom ?? 1,  t)
-    );
+    if (ci !== 3) {
+      applyBg(jc.bg,
+        lerp(fromCfg.bgX    ?? 50, toCfg.bgX    ?? 50, t),
+        lerp(fromCfg.bgY    ?? 50, toCfg.bgY    ?? 50, t),
+        lerp(fromCfg.bgZoom ?? 1,  toCfg.bgZoom ?? 1,  t)
+      );
+    }
 
     applyPlacedFg(jc.fg,  fromCfg, toCfg, tFg, '',  FG_DEFAULTS.journey.fg);
-    applyPlacedFg(jc.fg2, fromCfg, toCfg, tFg, '2', FG_DEFAULTS.journey.fg2);
+    const skipFg2OnEarlyCh4 = IS_MOBILE() && ci === 3 && chOp < 0.30;
+    if (skipFg2OnEarlyCh4) {
+      gs(jc.fg2, { opacity: 0 });
+    } else {
+      applyPlacedFg(jc.fg2, fromCfg, toCfg, tFg, '2', FG_DEFAULTS.journey.fg2);
+    }
 
     const activeDialog = t >= 0.5 ? toCfg.dialog : fromCfg.dialog;
     if (activeDialog) {
