@@ -1700,9 +1700,24 @@ const restoreSavedViewState = () => {
     renderComments();
   }
 };
+const initMapsButton = () => {
+  const mapsBtn = document.querySelector('.mc-maps-btn');
+  if (!mapsBtn) return;
+  const rawQuery = String(mapsBtn.getAttribute('data-map-query') || '').trim();
+  if (!rawQuery) return;
+  const q = encodeURIComponent(rawQuery);
+  const ua = navigator.userAgent || '';
+  const isiOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  mapsBtn.href = isiOS
+    ? `https://maps.apple.com/?q=${q}`
+    : `https://www.google.com/maps/search/?api=1&query=${q}`;
+  mapsBtn.target = isiOS ? '_self' : '_blank';
+  mapsBtn.rel = 'noopener';
+};
 const startApp = () => {
   appReady = true;
   restoreSavedViewState();
+  initMapsButton();
   render();
   initMusic();
   void initSupabase();
