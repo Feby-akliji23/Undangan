@@ -951,15 +951,32 @@
       color: rgba(248,245,239,.86);
       text-shadow: 0 6px 20px rgba(0,0,0,.36);
     }
-    #mc1 .mc-intro-cover .mc-names-block { margin: clamp(22px,4vh,44px) 0 0; }
+    #mc1 .mc-intro-cover .mc-names-block {
+      margin: 0;
+      position: relative;
+      padding: 0;
+      border-radius: 0;
+      background: none;
+      box-shadow: none;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
     #mc1 .mc-intro-cover .mc-name {
       color: #f8f5ef;
-      text-shadow: 0 10px 30px rgba(0,0,0,.45);
+      font-size: clamp(3rem, 9.6vw, 5.8rem);
+      letter-spacing: .012em;
+      text-shadow:
+        0 14px 34px rgba(0,0,0,.56),
+        0 3px 9px rgba(0,0,0,.38);
+      -webkit-text-stroke: .45px rgba(255,242,212,.34);
       margin: 0;
     }
     #mc1 .mc-intro-cover .mc-name-amp {
       color: #d6b06a;
-      text-shadow: 0 6px 18px rgba(0,0,0,.34);
+      font-size: clamp(2rem, 4.4vw, 3rem);
+      text-shadow:
+        0 9px 24px rgba(0,0,0,.46),
+        0 2px 7px rgba(0,0,0,.34);
     }
     .mc1-event-wrap {
       width: 100vw;
@@ -1046,6 +1063,15 @@
       margin-right: auto;
     }
     @media (max-width: 767px) {
+      #mc1 .mc-intro-cover .mc-names-block {
+        padding: 0;
+      }
+      #mc1 .mc-intro-cover .mc-name {
+        font-size: clamp(2.6rem, 12vw, 4rem);
+      }
+      #mc1 .mc-intro-cover .mc-name-amp {
+        font-size: clamp(1.65rem, 5.8vw, 2.25rem);
+      }
       .mc1-intro-copy {
         margin: clamp(6px, 1.4vh, 12px) auto clamp(12px, 2vh, 18px);
       }

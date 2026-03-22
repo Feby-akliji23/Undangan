@@ -680,6 +680,26 @@ const _showProgress = () => {
   }, 1000);
 };
 
+/* ── Main content nav buttons visibility (up/down) ── */
+let _navButtonsVisible = false;
+let _navButtonsHideTimer = null;
+const _showMainNavButtons = () => {
+  if (!mainContent || !mainContent.classList.contains('show')) return;
+  if (!_navButtonsVisible) {
+    _navButtonsVisible = true;
+    render();
+  }
+  clearTimeout(_navButtonsHideTimer);
+  _navButtonsHideTimer = setTimeout(() => {
+    _navButtonsVisible = false;
+    render();
+  }, 2000);
+};
+const _resetMainNavButtons = () => {
+  clearTimeout(_navButtonsHideTimer);
+  _navButtonsVisible = false;
+};
+
 const setProgress = (pct) => {
   if (!progressOrn) return;
   const p = Math.max(0, Math.min(100, pct));
@@ -1169,8 +1189,9 @@ const render = () => {
   const heroDone = heroCur >= 0.985;
 
   fadeToggle(btnContinue, heroDone && !inviteOpen);
-  fadeToggle(btnTop, inviteOpen);
-  fadeToggle(btnDown, inviteOpen);
+  const showMainNav = inviteOpen && _navButtonsVisible;
+  fadeToggle(btnTop, showMainNav);
+  fadeToggle(btnDown, showMainNav);
 
   renderHeroScene(heroCur);
 
@@ -1285,27 +1306,34 @@ function openInvite() {
   document.documentElement.classList.add('invite-open-boot');
   _hasOpenedInvite = true;
   if (_lenis) _lenis.stop(); /* pause Lenis saat main content terbuka */
+  _resetMainNavButtons();
   saveState();
   persistSessionState({ hasOpened: true, inviteOpen: true });
   mainContent.scrollTo({ top: 0, behavior: 'auto' });
   renderComments();
   render();
 }
-btnContinue.addEventListener('click', openInvite);
-btnBack.addEventListener('click', () => {
+const closeInviteToHero = () => {
   mainContent.classList.remove('show');
   document.body.classList.remove('invite-open');
   document.documentElement.classList.remove('invite-open-boot');
   if (_lenis) _lenis.start();
+  _resetMainNavButtons();
   resetSceneToTopImmediate();
   clearTimeout(_saveTimer);
   try { sessionStorage.removeItem(_SS_KEY); } catch(e) {}
   _hasOpenedInvite = false;
-  render(); kickRaf();
-});
+  render();
+  kickRaf();
+};
+btnContinue.addEventListener('click', openInvite);
+btnBack.addEventListener('click', closeInviteToHero);
+if (mainContent) {
+  mainContent.addEventListener('scroll', _showMainNavButtons, { passive: true });
+}
 btnTop.addEventListener('click', () => {
   if (mainContent.classList.contains('show')) {
-    mainContent.scrollTo({ top: 0, behavior: 'smooth' });
+    closeInviteToHero();
     return;
   }
   resetSceneToTopImmediate();
@@ -1314,11 +1342,13 @@ btnTop.addEventListener('click', () => {
 });
 btnDown.addEventListener('click', () => {
   if (mainContent.classList.contains('show')) {
-    const step = Math.max(280, Math.round(window.innerHeight * 0.82));
-    mainContent.scrollBy({ top: step, behavior: 'smooth' });
+    mainContent.scrollTo({ top: mainContent.scrollHeight, behavior: 'smooth' });
     return;
   }
   openInvite();
+  requestAnimationFrame(() => {
+    mainContent.scrollTo({ top: mainContent.scrollHeight, behavior: 'smooth' });
+  });
 });
 
 /* ── App boot ── */
@@ -1560,13 +1590,13 @@ if (cmtSubmit) {
       cleanupFns.push(() => target.removeEventListener(ev, fn, opts));
     };
 
-    bind(viewport, 'pointerdown', () => { setPaused(true); markManual(1400); }, { passive: true });
-    bind(viewport, 'pointerup', () => { setPaused(false); markManual(900); }, { passive: true });
-    bind(viewport, 'pointercancel', () => { setPaused(false); markManual(900); }, { passive: true });
+    bind(viewport, 'pointerdown', () => { setPaused(true); markManual(500); }, { passive: true });
+    bind(viewport, 'pointerup', () => { setPaused(false); markManual(300); }, { passive: true });
+    bind(viewport, 'pointercancel', () => { setPaused(false); markManual(300); }, { passive: true });
     bind(viewport, 'mouseenter', () => { setPaused(true); }, undefined);
-    bind(viewport, 'mouseleave', () => { setPaused(false); markManual(900); }, undefined);
-    bind(viewport, 'touchstart', () => markManual(1200), { passive: true });
-    bind(viewport, 'wheel', () => markManual(900), { passive: true });
+    bind(viewport, 'mouseleave', () => { setPaused(false); markManual(300); }, undefined);
+    bind(viewport, 'touchstart', () => markManual(450), { passive: true });
+    bind(viewport, 'wheel', () => markManual(350), { passive: true });
 
     const io = new IntersectionObserver(entries => {
       visible = entries.some(e => e.isIntersecting);
@@ -1601,12 +1631,12 @@ if (cmtSubmit) {
   const onMainContentScroll = () => {
     rows.forEach(r => {
       r.setPaused(true);
-      r.markManual(500);
+      r.markManual(220);
     });
     clearTimeout(mcScrollPauseTimer);
     mcScrollPauseTimer = setTimeout(() => {
       rows.forEach(r => r.setPaused(false));
-    }, 110);
+    }, 70);
   };
 
   mainContent.addEventListener('scroll', onMainContentScroll, { passive: true });
