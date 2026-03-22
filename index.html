@@ -48,8 +48,6 @@
         var s = JSON.parse(sessionStorage.getItem('wss_sh26') || '{}');
         if (s && s.inviteOpen) {
           document.documentElement.classList.add('invite-open-boot');
-        } else if (s && (Number(s.jAccum || 0) > 0 || Number(s.zone || 0) === 1)) {
-          document.documentElement.classList.add('journey-open-boot');
         }
       } catch (e) {}
     })();
@@ -67,16 +65,13 @@
       visibility: visible;
     }
     html.app-loading #heroCanvas,
-    html.app-loading #journeyCanvas,
     html.app-loading #main-content,
     html.app-loading .progress-bar,
     html.app-loading .scroll-hint,
     html.app-loading .btn-continue,
     html.app-loading .btn-top,
     html.app-loading .btn-down,
-    html.app-loading .btn-music,
-    html.app-loading #jHint,
-    html.app-loading #jDots {
+    html.app-loading .btn-music {
       visibility: hidden;
     }
     html.app-ready #appLoader { visibility: hidden; }
@@ -218,89 +213,12 @@
 
 </div>
 
-
-<!-- ═══════════════════════════════════════════════════
-     JOURNEY CANVAS — "Perjalanan Kami"
-     Background uses backgroundSize/backgroundPosition (never clips).
-     Foreground is a WEBP with transparency layered on top.
-═══════════════════════════════════════════════════ -->
-<div id="journeyCanvas">
-
-  <!-- Judul fixed di tengah atas — muncul selama journey aktif -->
-  <div id="jTitle">Perjalanan Kami</div>
-
-  <!-- Chapter 1: Pertemuan -->
-  <div class="jchapter" id="jch1">
-    <div class="jbg" id="jch1bg" style="background-image:url('assets/images/story/scene1_back.webp')"></div>
-    <img class="jfg" id="jch1fg" src="assets/images/story/scene1_front.webp" decoding="async" alt="">
-    <div class="jvignette"></div>
-    <div class="jdialog" id="jch1dlg">
-      <p class="jdialog-label"></p>
-      <p class="jdialog-text"></p>
-      <p class="jdialog-date"></p>
-    </div>
-  </div>
-
-  <!-- Chapter 2: Percakapan -->
-  <div class="jchapter" id="jch2">
-    <div class="jbg" id="jch2bg" data-bg="assets/images/story/scene2_back.webp"></div>
-    <img class="jfg" id="jch2fg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="assets/images/story/scene2_front.webp" decoding="async" alt="">
-    <div class="jvignette"></div>
-    <div class="jdialog" id="jch2dlg">
-      <p class="jdialog-label"></p>
-      <p class="jdialog-text"></p>
-      <p class="jdialog-date"></p>
-    </div>
-  </div>
-
-  <!-- Chapter 3: Bersama -->
-  <div class="jchapter" id="jch3">
-    <div class="jbg" id="jch3bg" data-bg="assets/images/story/scene3_back.webp"></div>
-    <img class="jfg" id="jch3fg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="assets/images/story/scene3_front.webp" decoding="async" alt="">
-    <div class="jvignette"></div>
-    <div class="jdialog" id="jch3dlg">
-      <p class="jdialog-label"></p>
-      <p class="jdialog-text"></p>
-      <p class="jdialog-date"></p>
-    </div>
-  </div>
-
-  <!-- Chapter 4: Ikrar -->
-  <div class="jchapter" id="jch4">
-    <div class="jbg" id="jch4bg"></div>
-    <div class="jhero-flowers" aria-hidden="true">
-      <img class="jhero-flower jhero-flower-tl" src="assets/images/hero/bunga%20kiri%20atas.webp" decoding="async" alt="">
-      <img class="jhero-flower jhero-flower-tr" src="assets/images/hero/bunga%20kanan%20atas.webp" decoding="async" alt="">
-      <img class="jhero-flower jhero-flower-bl" src="assets/images/hero/bunga%20kiri%20bawah.webp" decoding="async" alt="">
-      <img class="jhero-flower jhero-flower-br" src="assets/images/hero/bunga%20kanan%20bawah.webp" decoding="async" alt="">
-    </div>
-    <img class="jfg" id="jch4fg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="assets/images/story/scene4_front.webp" decoding="async" alt="">
-    <img class="jfg jfg-birds" id="jch4fg2" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="assets/images/hero/burung.webp" decoding="async" alt="">
-    <div class="jvignette"></div>
-    <div class="jdialog" id="jch4dlg">
-      <p class="jdialog-label"></p>
-      <p class="jdialog-text"></p>
-      <p class="jdialog-date"></p>
-    </div>
-  </div>
-
-  <div id="jHint"><div class="hint-line"></div><span>Scroll</span></div>
-  <div id="jDots">
-    <div class="jdot" data-i="0"></div>
-    <div class="jdot" data-i="1"></div>
-    <div class="jdot" data-i="2"></div>
-    <div class="jdot" data-i="3"></div>
-  </div>
-</div>
-
 <div id="progressOrn" aria-hidden="true">
   <div class="porn-track"><div class="porn-fill"></div></div>
   <span class="porn-pct">0%</span>
 </div>
 <div class="scroll-hint" id="scrollHint"><div class="hint-line"></div><span>Scroll</span></div>
 <button class="btn-continue" id="btnContinue">Lihat Undangan ↓</button>
-<button class="btn-top" id="btnTop" title="Kembali ke atas"></button>
-<button class="btn-down" id="btnDown" title="Buka undangan"></button>
 <audio id="bgMusic" loop preload="metadata"></audio>
 <button class="btn-music" id="btnMusic" type="button" aria-label="Nyalakan musik" aria-pressed="false" title="Nyalakan musik">
   <span class="btn-music-note" aria-hidden="true">♪</span>
@@ -315,6 +233,8 @@
       Kembali
     </button>
   </nav>
+  <button class="btn-top" id="btnTop" title="Ke atas konten"></button>
+  <button class="btn-down" id="btnDown" title="Turun konten"></button>
 
   <!-- MAIN WRAPPER -->
   <main class="mc-main">

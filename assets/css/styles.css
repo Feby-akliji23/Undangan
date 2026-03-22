@@ -4,13 +4,7 @@
       --gold:#b08a4f;
       --paper:#f6f5f2;
 
-      /* ── Journey tuning (mobile default) ── */
-      --journey-title-size: clamp(.82rem, 3.4vw, 1rem);
-      --journey-dialog-size: clamp(1rem, 4vw, 1.24rem);
-      --journey-dialog-date-size: clamp(.68rem, 2.7vw, .82rem);
-      --journey-dialog-width: min(280px, 80vw);
-      --journey-dialog-pad-y: clamp(10px, 2.8vw, 14px);
-      --journey-dialog-pad-x: clamp(12px, 3.1vw, 16px);
+      /* ── Button tuning (mobile default) ── */
       --journey-btn-font-size: clamp(.72rem, 2.8vw, .9rem);
       --journey-btn-pad-y: .65rem;
       --journey-btn-pad-x: 2rem;
@@ -294,16 +288,13 @@
 
     html.app-ready #appLoader { visibility:hidden; pointer-events:none; }
     html.app-loading #heroCanvas,
-    html.app-loading #journeyCanvas,
     html.app-loading #main-content,
     html.app-loading #progressOrn,
     html.app-loading .scroll-hint,
     html.app-loading .btn-continue,
     html.app-loading .btn-top,
     html.app-loading .btn-down,
-    html.app-loading .btn-music,
-    html.app-loading #jHint,
-    html.app-loading #jDots { visibility:hidden; }
+    html.app-loading .btn-music { visibility:hidden; }
 
     /* ═══════════════════════════════════════════════════
        HERO CANVAS
@@ -795,14 +786,10 @@
     }
     #main-content.show { opacity:1; pointer-events:auto; }
 
-    /* Hide journey canvas/buttons when invite is open */
-    body.invite-open #journeyCanvas { opacity:0 !important; pointer-events:none !important; }
+    /* Hide hero-only overlays when invite is open */
     body.invite-open .btn-continue,
-    body.invite-open .btn-down,
-    body.invite-open .btn-top,
     body.invite-open .scroll-hint,
-    body.invite-open #progressOrn,
-    body.invite-open #jTitle {
+    body.invite-open #progressOrn {
       opacity:0 !important;
       pointer-events:none !important;
     }
@@ -812,49 +799,18 @@
       pointer-events:auto !important;
     }
     html.invite-open-boot #heroCanvas,
-    html.invite-open-boot #journeyCanvas,
     html.invite-open-boot .btn-continue,
-    html.invite-open-boot .btn-down,
-    html.invite-open-boot .btn-top,
     html.invite-open-boot .scroll-hint,
-    html.invite-open-boot #progressOrn,
-    html.invite-open-boot #jTitle,
-    html.invite-open-boot #jHint,
-    html.invite-open-boot #jDots {
-      opacity:0 !important;
-      pointer-events:none !important;
-    }
-    html.journey-open-boot #main-content {
-      opacity:0 !important;
-      pointer-events:none !important;
-    }
-    html.journey-open-boot #heroCanvas {
-      opacity:0 !important;
-      pointer-events:none !important;
-    }
-    html.journey-open-boot #journeyCanvas {
-      opacity:1 !important;
-      pointer-events:auto !important;
-    }
-    html.journey-open-boot .btn-continue,
-    html.journey-open-boot .btn-down,
-    html.journey-open-boot .btn-top,
-    html.journey-open-boot .scroll-hint,
-    html.journey-open-boot #jHint,
-    html.journey-open-boot #jDots {
+    html.invite-open-boot #progressOrn {
       opacity:0 !important;
       pointer-events:none !important;
     }
     html.scene-boot #heroCanvas,
-    html.scene-boot #journeyCanvas,
     html.scene-boot #progressOrn,
     html.scene-boot .scroll-hint,
     html.scene-boot .btn-continue,
     html.scene-boot .btn-down,
-    html.scene-boot .btn-top,
-    html.scene-boot #jTitle,
-    html.scene-boot #jHint,
-    html.scene-boot #jDots {
+    html.scene-boot .btn-top {
       opacity:0 !important;
       pointer-events:none !important;
     }
@@ -1759,181 +1715,6 @@
 
     .mc-gift-copy.copied { background:#2a7a5e !important; color:#fff !important; }
 
-    /* ═══════════════════════════════════════════════════
-       JOURNEY SCENE
-    ═══════════════════════════════════════════════════ */
-    #journeyCanvas {
-      position:fixed; inset:0; width:100vw; height:100vh;
-      overflow:hidden; z-index:9; opacity:0; pointer-events:none;
-      /* touch-action dihapus — Lenis butuh touch events diteruskan */
-      transition: none;
-    }
-    #journeyCanvas.active { pointer-events:auto; }
-
-    /* Each chapter — stacked, JS drives opacity */
-    .jchapter {
-      position:absolute; inset:0; opacity:0;
-      /* will-change dikelola JS secara dinamis — hanya aktif saat chapter
-         visible. Static will-change di sini menyebabkan GPU layer
-         teralokasi bahkan saat chapter opacity:0. */
-      contain: paint;
-      isolation: isolate;
-    }
-
-    /*
-      BACKGROUND — the key piece.
-      We use a <div> with background-image + background-size + background-position.
-      This means zoom is done by changing background-size (e.g. "150%"),
-      and pan by changing background-position (e.g. "30% 70%").
-      background-size never goes below "cover" equivalent so edges NEVER show.
-      overflow:hidden on parent clips everything.
-    */
-    .jbg {
-      position:absolute; inset:0;
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center center;
-      /* will-change dikelola JS secara dinamis — hanya aktif saat chapter visible */
-    }
-
-    /* Foreground — WEBP with transparency, sits above bg */
-    .jfg {
-      position:absolute;
-      bottom:0; left:50%;
-      transform: translateX(-50%);
-      height:105%;
-      object-fit:contain;
-      object-position:bottom center;
-      /* will-change dikelola JS secara dinamis */
-      pointer-events:none;
-    }
-
-    /* Chapter 4 uses Hero assets (without hero text) */
-    #jch4 .jhero-flowers {
-      position:absolute;
-      inset:0;
-      z-index:5;
-      pointer-events:none;
-    }
-    #jch4bg {
-      background-image: linear-gradient(160deg, #fffefb 0%, #fdf8f0 52%, #f7eee1 100%);
-      background-size: cover;
-      background-position: center center;
-    }
-    #jch4bg::after {
-      display:none;
-    }
-    #jch4 .jhero-flower {
-      position:absolute;
-      height:auto;
-      animation: none !important;
-      /* will-change dikelola JS secara dinamis */
-      filter: var(--hero-flower-shadow);
-    }
-    #jch4 .jhero-flower-tl {
-      top:0; left:0;
-      width:clamp(190px, 22vw, 320px);
-      transform-origin:top left;
-    }
-    #jch4 .jhero-flower-tr {
-      top:0; right:0;
-      width:clamp(130px, 15vw, 220px);
-      transform-origin:top right;
-      animation-duration:9.2s;
-      animation-delay:-1.2s;
-    }
-    #jch4 .jhero-flower-bl {
-      bottom:0; left:0;
-      width:clamp(130px, 15vw, 220px);
-      transform-origin:bottom left;
-      animation-duration:9.2s;
-      animation-delay:-1.2s;
-    }
-    #jch4 .jhero-flower-br {
-      bottom:0; right:0;
-      width:clamp(190px, 22vw, 320px);
-      transform-origin:bottom right;
-      animation-delay:-.45s;
-    }
-    #jch4fg {
-      z-index:8;
-    }
-    #jch4fg2.jfg-birds {
-      z-index:7;
-      animation: none !important;
-      width:clamp(280px, 44vw, 660px);
-      height:auto;
-      bottom:clamp(16px, 4.2vh, 52px);
-      object-fit:contain;
-      object-position:center;
-      filter:var(--hero-bird-shadow) contrast(1.04) brightness(.96);
-      opacity:.98;
-    }
-
-    /* Vignette dihapus — tidak pakai layer hitam */
-    .jvignette { display:none; }
-
-    /* ── Dialog box — per movement, positioned via JS from CONFIG ── */
-    .jdialog {
-      position:absolute; z-index:10;
-      pointer-events:none;
-      /* will-change dikelola GSAP via applyPlacedFg — tidak perlu static */
-      width: var(--journey-dialog-width);
-      max-width: calc(100vw - 24px);
-      background: rgba(255,255,255,0.72);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.55);
-      border-radius: 6px;
-      padding: var(--journey-dialog-pad-y) var(--journey-dialog-pad-x);
-      box-shadow:
-        0 16px 40px rgba(0,0,0,.20),
-        0 4px 14px rgba(0,0,0,.10),
-        0 1px 0 rgba(255,255,255,.55) inset;
-    }
-    .jdialog-label {
-      font-family:"Cinzel",serif; text-transform:uppercase;
-      letter-spacing:.2em; font-size:clamp(.44rem,.6vw,.62rem);
-      color:rgba(80,65,40,0.65); margin-bottom:clamp(4px,.8vw,8px);
-    }
-    .jdialog-text {
-      font-family:"Cormorant Garamond","Garamond",serif;
-      font-size:var(--journey-dialog-size); line-height:1.55;
-      color:rgba(20,15,10,0.88); font-style:italic;
-      overflow-wrap:anywhere;
-    }
-    .jdialog-date {
-      font-family:"Cinzel",serif; font-size:var(--journey-dialog-date-size);
-      letter-spacing:.18em; color:var(--gold);
-      margin-top:clamp(5px,.8vw,9px);
-    }
-
-    /* Chapter nav dots */
-    #jDots {
-      position:fixed; right:clamp(10px,2vw,20px); top:50%;
-      transform:translateY(-50%); z-index:20;
-      display:flex; flex-direction:column; gap:7px;
-      opacity:0; transition:opacity .4s;
-    }
-    #jDots.show { opacity:1; }
-    .jdot {
-      width:6px; height:6px; border-radius:50%;
-      background:rgba(255,255,255,.3);
-      border:1px solid rgba(255,255,255,.45);
-      transition:background .3s,transform .3s;
-    }
-    .jdot.active { background:rgba(255,210,100,.9); transform:scale(1.5); }
-
-    /* Journey scroll hint — white version */
-    #jHint {
-      position:fixed; bottom:calc(18px + env(safe-area-inset-bottom,0px));
-      left:50%; transform:translateX(-50%); z-index:20;
-      display:flex; flex-direction:column; align-items:center; gap:5px;
-      font-family:"Cinzel",serif; font-size:clamp(.68rem,2.2vw,.82rem); letter-spacing:.18em;
-      text-transform:uppercase; color:rgba(255,255,255,.6);
-      opacity:0; transition:opacity .4s;
-    }
-
     /* Mobile tuning: loader */
     @media (max-width: 767px) {
       #appLoader {
@@ -1948,18 +1729,6 @@
       .ldr-enter-btn  { width:clamp(104px,26vw,124px); }
       .ldr-enter-label { font-size:clamp(.82rem,3.4vw,1rem); }
 
-      #jch4 .jhero-flower-tl,
-      #jch4 .jhero-flower-br {
-        width:clamp(210px, 42vw, 340px);
-      }
-      #jch4 .jhero-flower-tr,
-      #jch4 .jhero-flower-bl {
-        width:clamp(170px, 34vw, 280px);
-      }
-      #jch4fg2.jfg-birds {
-        width:clamp(300px, 88vw, 540px);
-        bottom:clamp(10px, 2.4vh, 24px);
-      }
     }
 
     /* Tablet tuning */
@@ -1969,12 +1738,6 @@
         --ldr-enter-y: clamp(66svh, 70svh, 75svh);
       }
       :root {
-        --journey-title-size: clamp(1.08rem, 2.5vw, 1.45rem);
-        --journey-dialog-size: clamp(1.24rem, 2.8vw, 1.7rem);
-        --journey-dialog-date-size: clamp(.86rem, 1.8vw, 1.08rem);
-        --journey-dialog-width: min(560px, 64vw);
-        --journey-dialog-pad-y: clamp(12px, 2vw, 20px);
-        --journey-dialog-pad-x: clamp(16px, 2.3vw, 24px);
         --journey-btn-font-size: clamp(.84rem, 1.55vw, 1rem);
         --journey-btn-pad-y: .74rem;
         --journey-btn-pad-x: 2.3rem;
@@ -2003,52 +1766,9 @@
       .comment-bubble-date { font-size:clamp(.76rem,1.1vw,.9rem); }
       .comment-bubble-text { font-size:clamp(1.08rem,1.7vw,1.18rem); }
     }
-    #jHint.show { opacity:1; }
-    #jHint .hint-line { background:linear-gradient(to bottom,rgba(255,210,100,.7),transparent); }
-
-    /* Judul "Perjalanan Kami" — samakan style dengan tombol Lihat Undangan */
-    #jTitle {
-      position:fixed; top:clamp(14px,3.2vh,30px); left:50%;
-      transform:translateX(-50%) translateY(0);
-      z-index:35; pointer-events:none;
-      font-family:"Cinzel",serif; text-transform:uppercase;
-      letter-spacing:.16em;
-      font-size:var(--journey-btn-font-size);
-      color:var(--ink);
-      white-space:nowrap;
-      display:inline-flex; align-items:center;
-      padding:var(--journey-btn-pad-y) var(--journey-btn-pad-x);
-      border-radius:999px;
-      border:1px solid rgba(176,138,79,.6);
-      background:rgba(255,255,255,.72);
-      backdrop-filter:blur(6px);
-      -webkit-backdrop-filter:blur(6px);
-      box-shadow:0 10px 24px rgba(0,0,0,.16), 0 1px 0 rgba(255,255,255,.64) inset;
-      animation:btnContinueFloat 2.4s ease-in-out infinite;
-    }
-    @media (max-width: 767px) {
-      #jTitle {
-        letter-spacing:.16em;
-      }
-    }
-
-    /* Desktop tuning: Journey dialog */
+    /* Desktop tuning */
     @media (min-width: 1024px) {
       :root {
-        --journey-title-size: clamp(1.14rem, 1.55vw, 1.85rem);
-        --journey-dialog-size: clamp(1.32rem, 1.95vw, 2.2rem);
-        --journey-dialog-date-size: clamp(.88rem, 1.12vw, 1.24rem);
-        --journey-dialog-width: min(620px, 40vw);
-        --journey-dialog-pad-y: clamp(14px, 1.5vw, 24px);
-        --journey-dialog-pad-x: clamp(16px, 1.7vw, 30px);
-        --journey-btn-font-size: clamp(.76rem, .95vw, .98rem);
-        --journey-btn-pad-y: .74rem;
-        --journey-btn-pad-x: 2.35rem;
         --music-btn-size: clamp(44px, 3.1vw, 52px);
       }
-
-      /* Journey dialog tuned via :root variables above */
     }
-
-    /* Dialog — tanpa fade, tanpa label */
-    .jdialog-label { display:none; }

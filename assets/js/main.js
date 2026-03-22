@@ -140,10 +140,6 @@ const CONFIG = {
       fg4: { xPct: 0,   yPct: 100, xOrigin: 0,   yOrigin: 1 },
       fg5: { xPct: 100, yPct: 100, xOrigin: 1,   yOrigin: 1 },
     },
-    journey: {
-      fg:  { xPct: 50, yPct: 100, xOrigin: 0.5, yOrigin: 1 },
-      fg2: { xPct: 50, yPct: 100, xOrigin: 0.5, yOrigin: 1 },
-    },
   },
 
   /* ── Fallback — dipakai kalau Lenis gagal load ──
@@ -167,10 +163,6 @@ const FG_DEFAULTS = {
     fg3: CONFIG.fgPlacement?.hero?.fg3 || { xPct: 100, yPct: 0,   xOrigin: 1,   yOrigin: 0 },
     fg4: CONFIG.fgPlacement?.hero?.fg4 || { xPct: 0,   yPct: 100, xOrigin: 0,   yOrigin: 1 },
     fg5: CONFIG.fgPlacement?.hero?.fg5 || { xPct: 100, yPct: 100, xOrigin: 1,   yOrigin: 1 },
-  },
-  journey: {
-    fg:  CONFIG.fgPlacement?.journey?.fg  || { xPct: 50, yPct: 100, xOrigin: 0.5, yOrigin: 1 },
-    fg2: CONFIG.fgPlacement?.journey?.fg2 || { xPct: 50, yPct: 100, xOrigin: 0.5, yOrigin: 1 },
   },
 };
 
@@ -199,7 +191,7 @@ const HERO_SCENE = {
       movements: [
         /* mv1 — opening: teks intro langsung terlihat, fg fade-in dari bawah */
         {
-          scroll: 120,
+          scroll: 150,
           ease: 'out',
           desktop: {
             bgX: 50, bgY: 50, bgZoom: 1,
@@ -223,7 +215,7 @@ const HERO_SCENE = {
 
         /* mv2 — settle: semua fg masuk smooth, burung landing di posisi intro */
         {
-          scroll: 340,
+          scroll: 360,
           ease: 'out',
           desktop: {
             bgX: 50, bgY: 60, bgZoom: 1.16,
@@ -291,190 +283,6 @@ const HERO_SCENE = {
             fg5X: 100, fg5Y: 100, fg5XOrigin: 1, fg5YOrigin: 1, fg5Scale: 0.9,  fg5Opacity: 1.0,
             dialog: { style: 'hero-prayer', desktop: { x: 50, y: 50, anchor: 'center' }, mobile: { x: 50, y: 50, anchor: 'center' } },
           },
-        },
-      ],
-    },
-  ],
-};
-
-/* ════════════════════════════════════════════════════
-   JOURNEY CONFIG — keyframe scroll per chapter
-   ────────────────────────────────────────────────────
-   bgX/bgY   : fokus background 0–100% (50/50 = tengah)
-   bgZoom    : zoom (1.0 = cover pas, 1.3 = zoom 30%)
-   fgX/fgY   : geser foreground horizontal/vertikal px
-   fgScale   : skala foreground
-   fgRotate  : rotasi foreground (derajat)
-   fgOpacity : opacity foreground (0–1)
-   fg2*      : optional foreground kedua
-   fgX/fgY   : posisi bebas di viewport (%) saat 0..100
-   fgXOrigin/fgYOrigin : origin titik elemen (0..1, optional)
-   fg2X/fg2Y : posisi bebas fg2 di viewport (%) saat 0..100
-   fg2XOrigin/fg2YOrigin : origin titik elemen fg2 (0..1, optional)
-   fgRevealStart : 0..1, fg mulai muncul di akhir transisi
-   fgCutIn   : true = fg langsung muncul (no fade)
-   desktop/mobile : override nilai per perangkat
-   scroll    : jarak scroll absolut per movement (virtual units)
-               jika tidak diisi, fallback default 280
-   ease      : 'inOut' | 'out' | 'in' | 'linear'
-   ════════════════════════════════════════════════════ */
-const JOURNEY = {
-  chapters: [
-    /* ── Chapter 1: Pertemuan ── */
-    {
-      movements: [
-        {
-          scroll: 340, ease:'out',
-          desktop: { bgX:0, bgY:0, bgZoom:1.60, fgX:50, fgY:100, fgXOrigin:0.5, fgYOrigin:0.88, fgScale:1.0, fgOpacity:0.0 },
-          mobile:  { bgX:20, bgY:0, bgZoom:1.5, fgX:50, fgY:100, fgXOrigin:0.5, fgYOrigin:0.88, fgScale:0.94, fgOpacity:0.0 },
-          dialog: {
-            text: 'Tak pernah kami sangka',
-            desktop: { x: 20, y: 20, anchor: 'top-right', width: 'min(420px, 38vw)' },
-            mobile:  { x: 50, y: 25, anchor: 'top-right', width: 'min(300px, 84vw)' }
-          }
-        },
-        {
-          scroll: 540, ease:'inOut',
-          desktop: { bgX:100, bgY:35, bgZoom:1.45,  fgX:42, fgY:100, fgXOrigin:0.5, fgYOrigin:0.66, fgScale:1.2, fgOpacity:0.0 },
-          mobile:  { bgX:100, bgY:35, bgZoom: 1, fgX:0, fgY:50, fgXOrigin:1, fgYOrigin:0.5,  fgScale:1.16, fgOpacity:0.0 },
-          dialog: {
-            text: 'Tak pernah kami sangka',
-            desktop: { x: 20, y: 20, anchor: 'top-right', width: 'min(420px, 38vw)' },
-            mobile:  { x: 50, y: 25, anchor: 'top-right', width: 'min(300px, 84vw)' }
-          }
-        },
-        {
-          scroll: 520, ease:'inOut', 
-          desktop: { bgX:50, bgY:55, bgZoom:1.25, fgX:42, fgY:100, fgXOrigin:0.5, fgYOrigin:0.66, fgScale:1.3, fgOpacity:1.0 },
-          mobile:  { bgX:50, bgY:55, bgZoom: 1.5, fgX:50, fgY:50, fgXOrigin:0.5, fgYOrigin:0.5, fgScale:1.16, fgOpacity:1.0 },
-          dialog: {
-            text: 'Takdir mempertemukan dua hati.',
-            desktop: { x: 100, y: 20, anchor: 'center', width: 'min(420px, 38vw)' },
-            mobile:  { x: 50,   y: 25,  anchor: 'center', width: 'min(300px, 84vw)' }
-          }
-        },
-        {
-          scroll: 260, ease:'in',
-          desktop: { bgX:50, bgY:50, bgZoom:1.08, fgX:50, fgY:100, fgXOrigin:0.5, fgYOrigin:0.78, fgScale:1.2, fgOpacity:0.7 },
-          mobile:  { bgX:50, bgY:55, bgZoom: 1.5, fgX:50, fgY:50, fgXOrigin:0.5, fgYOrigin:0.5, fgScale:1.3, fgOpacity:1.0 },
-          dialog: null
-        },
-      ],
-    },
-
-    /* ── Chapter 2: Percakapan ── */
-    {
-      movements: [
-        {
-          scroll: 260, ease:'out',
-          desktop: { bgX:0, bgY:0, bgZoom:1.0, fgX:18,   fgY:85, fgXOrigin:0.5, fgYOrigin:0.35, fgScale:0.9, fgOpacity:0.0 },
-          mobile:  { bgX:0, bgY:0, bgZoom:1.0, fgX:18, fgY:85, fgXOrigin:0.5, fgYOrigin:0.35, fgScale:0.86, fgOpacity:0.0 },
-          dialog: {
-            text: 'lalu waktu pelan-pelan mengajarkan kami untuk saling mengenal, memahami, dan akhirnya memilih satu sama lain.',
-            desktop: { x: 50, y: 50, anchor: 'center', width: 'min(520px, 38vw)' },
-            mobile:  { x: 50, y: 50, anchor: 'center', width: 'min(300px, 84vw)' }
-          }
-        },
-        {
-          scroll: 700, ease:'inOut',
-          desktop: { bgX:50, bgY:50, bgZoom:1.05, fgX:40, fgY:70, fgXOrigin:0.5, fgYOrigin:0.35, fgScale:1.4, fgRotate:8,  fgOpacity:1.0 },
-          mobile:  { bgX:50, bgY:50, bgZoom:1.0, fgX:50, fgY:50, fgXOrigin:0.5, fgYOrigin:0.5, fgScale:1.20, fgRotate:8, fgOpacity:1.0 },
-          dialog: {
-            text: 'menumbuhkan keyakinan bahwa ini bukan sekadar kebetulan, melainkan perjalanan yang memang ditakdirkan.',
-            desktop: { x: 94, y: 30, anchor: 'top-right', width: 'min(520px, 38vw)' },
-            mobile:  { x: 100, y: 20,  anchor: 'top-right', width: 'min(300px, 84vw)' }
-          }
-        },
-        {
-          scroll: 240, ease:'in',
-          desktop: { bgX:90, bgY:10, bgZoom:1.25, fgX:40, fgY:70, fgXOrigin:0.5, fgYOrigin:0.35, fgScale:1.4, fgRotate:8, fgOpacity:0.7 },
-          mobile:  { bgX:100, bgY:100, bgZoom:1.0, fgX:40, fgY:70, fgXOrigin:0.5, fgYOrigin:0.35, fgScale:1.18, fgRotate:8, fgOpacity:0.7 },
-          dialog: null
-        },
-      ],
-    },
-
-    /* ── Chapter 3: Bersama ── */
-    {
-      movements: [
-        {
-          scroll: 100, ease:'out',
-          desktop: { bgX:100, bgY:35, bgZoom:1.60,  fgX:0, fgY:50, fgXOrigin:0.5, fgYOrigin:1, fgScale:1.0, fgOpacity:0.0 },
-          mobile:  { bgX:100, bgY:0, bgZoom:1.5, fgX:0, fgY:100, fgXOrigin:1, fgYOrigin:1, fgScale:0.92, fgOpacity:0.0 },
-          dialog: {
-            text: 'Masalah dan tantangan datang, menguji, menguatkan, dan mendewasakan.',
-            desktop: { x: 50, y: 50, anchor: 'center', width: 'min(520px, 38vw)' },
-            mobile:  { x: 50, y: 50, anchor: 'center', width: 'min(300px, 84vw)' }
-          }
-        },
-        {
-          scroll: 680, ease:'inOut',
-          desktop: { bgX:100, bgY:35, bgZoom:1.08, fgX:0, fgY:100, fgXOrigin:0, fgYOrigin:0.7,  fgScale:1.0, fgOpacity:0.0 },
-          mobile:  { bgX:50, bgY:50, bgZoom:1.3, fgX:0, fgY:100, fgXOrigin:1, fgYOrigin:0.7, fgScale:0.92, fgOpacity:0.0 },
-          dialog: {
-            text: 'Masalah dan tantangan datang, menguji, menguatkan, dan mendewasakan.',
-            desktop: { x: 50, y: 50, anchor: 'center', width: 'min(520px, 38vw)' },
-            mobile:  { x: 50, y: 50, anchor: 'center', width: 'min(300px, 84vw)' }
-          }
-        },
-        {
-          scroll: 700, ease:'inOut',
-          desktop: {
-            bgX: 0, bgY: 100, bgZoom: 1.08,
-            fgX:22, fgY:100,         
-            fgXOrigin:0, fgYOrigin:0.8, 
-            fgScale:1.2, fgOpacity:1.0
-          },
-          mobile:  { bgX:0, bgY:100, bgZoom:1.08, fgX:50, fgY:70, fgXOrigin:0.5, fgYOrigin:0.7, fgScale:1.1, fgOpacity:1.0 },
-          dialog: {
-            text: 'Hingga kami sadar,\ncinta ini layak diperjuangkan.',
-            desktop: { x: 94, y: 30, anchor: 'top',          width: 'min(520px, 38vw)' },
-            mobile:  { x: 50, y: 80, anchor: 'bottom-center', width: 'min(300px, 84vw)' }
-          }
-        },
-        {
-          scroll: 240, ease:'inOut',
-          desktop: { bgX:100, bgY:100, bgZoom:1.20, fgX:50, fgY:100, fgXOrigin:0, fgYOrigin:0.7, fgScale:1.2,  fgOpacity:1.0 },
-          mobile:  { bgX:50, bgY:50, bgZoom:1.3, fgX:0, fgY:100, fgXOrigin:1, fgYOrigin:0.7, fgScale:0.92, fgOpacity:0.0 },
-          dialog: null
-        },
-      ],
-    },
-
-    /* ── Chapter 4: Ikrar ── */
-    {
-      movements: [
-        {
-          scroll: 120, ease:'out',
-          desktop: { bgX:50, bgY:80, bgZoom:1.20, fgX:50,fgY:100,fgXOrigin:0.5,fgYOrigin:0.45, fgScale:0.5, fgOpacity:0.0, fg2X:100, fg2Y:0, fg2XOrigin:1, fg2YOrigin:0, fg2Scale:0.68, fg2Opacity:1.0 },
-          mobile:  { bgX:50, bgY:80, bgZoom:1.20, fgX:50, fgY:100, fgXOrigin:0.5, fgYOrigin:0.45, fgScale:0.42, fgOpacity:0.0, fg2X:100, fg2Y:0, fg2XOrigin:1, fg2YOrigin:0, fg2Scale:0.62, fg2Opacity:1.0 },
-          dialog: null
-        },
-        {
-          scroll: 300, ease:'out',
-          desktop: { bgX:50, bgY:0,  bgZoom:1.20,fgX:50,fgY:100,fgXOrigin:0.5,fgYOrigin:0.75,fgScale:1.05,fgOpacity:0.0, fg2X:40, fg2Y:50, fg2XOrigin:1, fg2YOrigin:0, fg2Scale:0.58, fg2Opacity:0.86 },
-          mobile:  { bgX:50, bgY:0, bgZoom:1.20, fgX:50, fgY:100, fgXOrigin:0.5, fgYOrigin:0.75, fgScale:0.90, fgOpacity:0.0, fg2X:50, fg2Y:50, fg2XOrigin:0.5, fg2YOrigin:0.5, fg2Scale:1.5, fg2Opacity:1.0},
-          dialog: {
-            text: 'Maka dengan ini kami mantap memutuskan...',
-            desktop: { x: 50, y: 50, anchor: 'center',   width: 'min(520px, 38vw)' },
-            mobile:  { x: 50,  y: 50,  anchor: 'center', width: 'min(300px, 84vw)' },
-          }
-        },
-        {
-          scroll: 760, ease:'inOut',
-          desktop: { bgX:0, bgY:0, bgZoom:1.60, fgX:50,fgY:100,fgXOrigin:0.5,fgYOrigin:0.75,fgScale:1.1,fgOpacity:1.0, fg2X:30, fg2Y:10, fg2XOrigin:1, fg2YOrigin:0, fg2Scale:0.7, fg2Opacity:0.86 },
-          mobile:  { bgX:0, bgY:0, bgZoom:1.60, fgX:50, fgY:100, fgXOrigin:0.5, fgYOrigin:0.95, fgScale:1.1, fgOpacity:1.0, fg2X:70, fg2Y:8, fg2XOrigin:1, fg2YOrigin:0.3, fg2Scale:1, fg2Opacity:1 },
-          dialog: {
-            text: 'Untuk mengikat janji, untuk berjalan bersama hari ini, esok, dan selamanya.',
-            desktop: { x: 50, y: 95, anchor: 'bottom-center', width: 'min(620px, 68vw)' },
-            mobile:  { x: 50, y: 25, anchor: 'center',        width: 'min(300px, 84vw)' },
-          }
-        },
-        {
-          scroll: 320, ease:'inOut',
-          desktop: { bgX:80, bgY:100, bgZoom:1.30,fgX:50,fgY:100,fgXOrigin:0.5,fgYOrigin:0.55,fgScale:1.55,fgOpacity:1.0, fg2X:50, fg2Y:0, fg2XOrigin:1, fg2YOrigin:0.2, fg2Scale:1.0, fg2Opacity:0.86 },
-          mobile:  { bgX:0, bgY:0, bgZoom:1.60, fgX:50, fgY:100, fgXOrigin:0.5, fgYOrigin:0.95, fgScale:1.3, fgOpacity:1.0, fg2X:80, fg2Y:70, fg2XOrigin:1, fg2YOrigin:1, fg2Scale:0.62, fg2Opacity:0.86 },
-          dialog: null
         },
       ],
     },
@@ -919,7 +727,7 @@ const applyBg = (el, bgX, bgY, bgZoom) => {
 
 /* ════════════════════════════════════════════════════
    BUILD RANGES — pre-compute _start/_end dari scroll
-   Dipakai oleh HERO_SCENE dan JOURNEY
+   Dipakai oleh HERO_SCENE
 ════════════════════════════════════════════════════ */
 const DEFAULT_SCROLL_PER_DURATION = 280;
 const getMovementScrollDistance = (m) => {
@@ -945,7 +753,6 @@ const buildRangesForScene = (scene) => {
   });
 };
 buildRangesForScene(HERO_SCENE);
-buildRangesForScene(JOURNEY);
 
 /* ════════════════════════════════════════════════════
    DIALOG POSITIONING — shared antara Hero dan Journey
@@ -1164,153 +971,6 @@ const renderHeroScene = (hp) => {
 };
 
 /* ════════════════════════════════════════════════════
-   JOURNEY RENDER
-════════════════════════════════════════════════════ */
-const journeyCanvas = document.getElementById('journeyCanvas');
-const jHint         = document.getElementById('jHint');
-const jDots         = document.getElementById('jDots');
-const jDotEls       = Array.from(jDots.querySelectorAll('.jdot'));
-const jChapters = JOURNEY.chapters.map((_, i) => ({
-  el:  document.getElementById(`jch${i+1}`),
-  bg:  document.getElementById(`jch${i+1}bg`),
-  fg:  document.getElementById(`jch${i+1}fg`),
-  fg2: document.getElementById(`jch${i+1}fg2`),
-  dlg: document.getElementById(`jch${i+1}dlg`),
-}));
-
-/* Lazy load journey images */
-const _imgCache = {};
-const _bgUrlRe  = /url\(['"]?([^'"]+)['"]?\)/;
-const _getBgSrc = (bgEl) => { const m = (bgEl.style.backgroundImage || '').match(_bgUrlRe); return m ? m[1] : ''; };
-const _cacheBgNaturalSize = (bgEl, src) => {
-  if (!src) return;
-  if (_imgCache[src]) { bgEl._natW = _imgCache[src].w; bgEl._natH = _imgCache[src].h; return; }
-  const img = new Image();
-  img.onload = () => { _imgCache[src] = { w: img.naturalWidth, h: img.naturalHeight }; bgEl._natW = img.naturalWidth; bgEl._natH = img.naturalHeight; };
-  img.src = src;
-};
-const ensureBgLoaded = (idx) => {
-  const jc = jChapters[idx]; if (!jc || !jc.bg) return;
-  const bg = jc.bg, dataSrc = bg.getAttribute('data-bg');
-  if (dataSrc && !bg.style.backgroundImage) bg.style.backgroundImage = `url('${dataSrc}')`;
-  const src = _getBgSrc(bg); if (!src || bg.dataset.loaded === '1') return;
-  bg.dataset.loaded = '1'; _cacheBgNaturalSize(bg, src);
-};
-const ensureFgElLoaded = (fg) => {
-  if (!fg || fg.dataset.loaded === '1') return;
-  const dataSrc = fg.getAttribute('data-src') || '';
-  const curSrc  = fg.getAttribute('src') || '';
-  if (!dataSrc && !curSrc) { fg.dataset.loaded = '1'; return; }
-  if (dataSrc && curSrc !== dataSrc) fg.setAttribute('src', dataSrc);
-  else if (!curSrc) fg.setAttribute('src', dataSrc || curSrc);
-  /* Decode lebih awal agar saat chapter muncul tidak ada spike decode di frame kritis */
-  if (typeof fg.decode === 'function') {
-    try { fg.decode().catch(() => {}); } catch(e) {}
-  }
-  fg.dataset.loaded = '1';
-};
-const ensureFgLoaded   = (idx) => { const jc = jChapters[idx]; if (!jc) return; ensureFgElLoaded(jc.fg); ensureFgElLoaded(jc.fg2); };
-const primeJourneyImages = (idx) => {
-  /* Prime 2 chapter ke depan supaya transisi 3 → 4 sudah siap di mobile */
-  ensureBgLoaded(idx);   ensureFgLoaded(idx);
-  ensureBgLoaded(idx+1); ensureFgLoaded(idx+1);
-  ensureBgLoaded(idx+2); ensureFgLoaded(idx+2);
-};
-
-setTimeout(() => { jChapters.forEach(jc => { const src = _getBgSrc(jc.bg); if (src) _cacheBgNaturalSize(jc.bg, src); }); }, 0);
-primeJourneyImages(0);
-
-const renderJourney = (jp) => {
-  const C = JOURNEY.chapters;
-  setProgress(jp * 100);
-  jHint.classList.toggle('show', jp < 0.04);
-  fadeToggle(btnContinue, jp >= .97);
-  jDots.classList.toggle('show', jp < 0.97);
-
-  let activeChIdx = 0;
-  C.forEach((ch, i) => { if (jp >= ch._start) activeChIdx = i; });
-  primeJourneyImages(activeChIdx);
-  jDotEls.forEach((d, i) => d.classList.toggle('active', i === activeChIdx));
-
-  C.forEach((ch, ci) => {
-    const jc = jChapters[ci];
-    const FADE = (IS_MOBILE() && (ci === 2 || ci === 3)) ? 0.018 : 0.035;
-    const chOp = ch._start === 0
-      ? (jp < ch._end - FADE ? 1 : 1 - norm(jp, ch._end - FADE, ch._end + FADE))
-      : jp < ch._start + FADE
-        ? norm(jp, ch._start - FADE, ch._start + FADE)
-        : jp < ch._end - FADE ? 1
-        : 1 - norm(jp, ch._end - FADE, ch._end + FADE);
-
-    const visible = chOp >= 0.02;
-
-    /* Chapter opacity — direct style, bukan GSAP */
-    jc.el.style.opacity = clamp(chOp, 0, 1).toFixed(4);
-
-    /* Dynamic will-change — alokasi GPU layer hanya saat chapter visible */
-    const wcVal = visible ? 'opacity' : 'auto';
-    if (jc.el.style.willChange  !== wcVal) jc.el.style.willChange  = wcVal;
-    if (jc.bg)  { const v = visible ? 'background-size, background-position' : 'auto'; if (jc.bg.style.willChange  !== v) jc.bg.style.willChange  = v; }
-    if (jc.fg)  { const v = visible ? 'transform, opacity' : 'auto'; if (jc.fg.style.willChange  !== v) jc.fg.style.willChange  = v; }
-    if (jc.fg2) { const v = visible ? 'transform, opacity' : 'auto'; if (jc.fg2.style.willChange !== v) jc.fg2.style.willChange = v; }
-
-    /* Fix 3: Pause floatFlower CSS animation saat chapter tidak visible.
-       Ch4 punya 4 bunga dengan infinite animation + filter:drop-shadow —
-       membuat 4 GPU layer baru sekaligus saat masuk = frame drop.
-       Pause animasi saat invisible, resume saat mulai visible. */
-    if (ci === 3) {
-      const flowers = jc.el.querySelectorAll('.jhero-flower');
-      const pauseVal = visible ? 'running' : 'paused';
-      flowers.forEach(f => { if (f.style.animationPlayState !== pauseVal) f.style.animationPlayState = pauseVal; });
-      /* Saat transisi awal chapter 4 di mobile, tahan dekorasi bunga sebentar
-         agar overlap dengan chapter 3 lebih ringan */
-      const flowersWrap = jc.el.querySelector('.jhero-flowers');
-      if (flowersWrap) flowersWrap.style.opacity = (IS_MOBILE() && chOp < 0.28) ? '0' : '1';
-    }
-
-    /* Skip full render kalau chapter hampir tidak terlihat */
-    if (!visible) return;
-
-    const frame = pickMovementFrame(ch.movements, jp);
-    if (!frame) return;
-    const { fromCfg, toCfg, t } = frame;
-
-    const hasFgReveal = Number.isFinite(toCfg.fgRevealStart);
-    const tFg = hasFgReveal
-      ? eout(norm(t, clamp(toCfg.fgRevealStart, 0, 0.999), 1))
-      : (toCfg.fgCutIn ? (t >= 0.999 ? 1 : 0) : t);
-
-    if (ci !== 3) {
-      applyBg(jc.bg,
-        lerp(fromCfg.bgX    ?? 50, toCfg.bgX    ?? 50, t),
-        lerp(fromCfg.bgY    ?? 50, toCfg.bgY    ?? 50, t),
-        lerp(fromCfg.bgZoom ?? 1,  toCfg.bgZoom ?? 1,  t)
-      );
-    }
-
-    applyPlacedFg(jc.fg,  fromCfg, toCfg, tFg, '',  FG_DEFAULTS.journey.fg);
-    const skipFg2OnEarlyCh4 = IS_MOBILE() && ci === 3 && chOp < 0.30;
-    if (skipFg2OnEarlyCh4) {
-      gs(jc.fg2, { opacity: 0 });
-    } else {
-      applyPlacedFg(jc.fg2, fromCfg, toCfg, tFg, '2', FG_DEFAULTS.journey.fg2);
-    }
-
-    const activeDialog = t >= 0.5 ? toCfg.dialog : fromCfg.dialog;
-    if (activeDialog) {
-      jc.dlg.querySelector('.jdialog-text').innerHTML = (activeDialog.text || '').replace(/\n/g, '<br>');
-      const dateEl = jc.dlg.querySelector('.jdialog-date');
-      if (dateEl) { dateEl.textContent = activeDialog.date || ''; dateEl.style.display = activeDialog.date ? '' : 'none'; }
-      applyDialogPos(jc.dlg, activeDialog);
-      jc.dlg.style.opacity = '1';
-      jc.dlg.style.display = '';
-    } else {
-      jc.dlg.style.display = 'none';
-    }
-  });
-};
-
-/* ════════════════════════════════════════════════════
    SCROLL ENGINE — Lenis sebagai input normalizer
    ────────────────────────────────────────────────────
    Lenis normalize delta dari wheel dan touchmove
@@ -1324,7 +984,6 @@ const renderJourney = (jp) => {
    syncTouch       : momentum touch ala iOS native
 ════════════════════════════════════════════════════ */
 const HERO_TOTAL    = Math.max(1, HERO_SCENE._scrollTotal || 1);
-const JOURNEY_TOTAL = Math.max(1, JOURNEY._scrollTotal || 1);
 
 /* Konstanta fallback — dipakai hanya kalau Lenis gagal load */
 const FALLBACK_WHEEL_MULT  = CONFIG.fallback.wheelMult;
@@ -1335,19 +994,14 @@ const FALLBACK_DEADZONE    = IS_MOBILE() ? CONFIG.fallback.deadzoneMobile    : C
 const _SS_KEY = 'wss_sh26';
 const _savedState = (() => { try { return JSON.parse(sessionStorage.getItem(_SS_KEY)) || {}; } catch(e) { return {}; } })();
 if (!_savedState.inviteOpen) document.documentElement.classList.remove('invite-open-boot');
-if (!(Number(_savedState.jAccum || 0) > 0 || Number(_savedState.zone || 0) === 1))
-  document.documentElement.classList.remove('journey-open-boot');
 
 let heroAccum  = clamp(_savedState.heroAccum || 0, 0, HERO_TOTAL);
-let jAccum     = clamp(_savedState.jAccum    || 0, 0, JOURNEY_TOTAL);
 let rafId      = 0;
 let heroTarget = heroAccum / HERO_TOTAL,  heroCur = heroTarget;
-let jTarget    = jAccum    / JOURNEY_TOTAL, jCur  = jTarget;
-let zone       = _savedState.zone || 0;
 let _hasOpenedInvite = !!_savedState.hasOpened;
 
 const buildSessionState = (overrides = {}) => ({
-  heroAccum, jAccum, zone,
+  heroAccum,
   hasOpened: _hasOpenedInvite,
   inviteOpen: mainContent.classList.contains('show'),
   ...overrides,
@@ -1361,17 +1015,9 @@ const saveState = () => { clearTimeout(_saveTimer); _saveTimer = setTimeout(() =
 const addDelta = (d) => {
   if (!appReady) return;
   _showProgress();
-  if (zone === 0) {
-    heroAccum  = clamp(heroAccum + d, 0, HERO_TOTAL);
-    heroTarget = heroAccum / HERO_TOTAL;
-    if (heroAccum >= HERO_TOTAL && d > 0) zone = 1;
-    kickRaf();
-  } else {
-    jAccum  = clamp(jAccum + d, 0, JOURNEY_TOTAL);
-    jTarget = jAccum / JOURNEY_TOTAL;
-    if (jAccum <= 0 && d < 0) zone = 0;
-    kickRaf();
-  }
+  heroAccum  = clamp(heroAccum + d, 0, HERO_TOTAL);
+  heroTarget = heroAccum / HERO_TOTAL;
+  kickRaf();
   saveState();
 };
 
@@ -1518,29 +1164,18 @@ const fadeToggle = (el, show) => {
 
 /* Master render */
 const heroCanvas = document.getElementById('heroCanvas');
-const jTitleEl   = document.getElementById('jTitle');
 const render = () => {
-  const inJourney  = zone === 1 || jCur > 0.008;
   const inviteOpen = mainContent.classList.contains('show');
-  const goingBack = jTarget < jCur || (zone === 0 && jCur > 0);
-  const fadeBackMul = IS_MOBILE() ? 28 : 42;
-  const fadeFwdMul = IS_MOBILE() ? 28 : 20;
-  const fade = clamp(jCur * (goingBack ? fadeBackMul : fadeFwdMul), 0, 1);
-  const heroOpacity = clamp(1 - fade, 0, 1);
+  const heroDone = heroCur >= 0.985;
 
-  fadeToggle(btnTop,  inJourney && !inviteOpen);
-  fadeToggle(btnDown, inJourney && !inviteOpen);
+  fadeToggle(btnContinue, heroDone && !inviteOpen);
+  fadeToggle(btnTop, inviteOpen);
+  fadeToggle(btnDown, inviteOpen);
 
-  if (jTitleEl) {
-    gs(jTitleEl, { opacity: (inJourney && !inviteOpen) ? 1 : 0 });
-  }
-
-  if (!inJourney || heroOpacity > 0.004) {
-    renderHeroScene(heroCur);
-  }
+  renderHeroScene(heroCur);
 
   /* Dynamic will-change untuk hero — aktif hanya saat hero terlihat */
-  const heroVisible = heroOpacity > 0.02;
+  const heroVisible = !inviteOpen;
   const heroWc = heroVisible ? 'transform, opacity' : 'auto';
   const heroBgWc = heroVisible ? 'background-size, background-position' : 'auto';
   if (heroBgPaper  && heroBgPaper.style.willChange  !== heroBgWc) heroBgPaper.style.willChange  = heroBgWc;
@@ -1550,21 +1185,11 @@ const render = () => {
   if (heroFlowerBL && heroFlowerBL.style.willChange !== heroWc)   heroFlowerBL.style.willChange = heroWc;
   if (heroFlowerBR && heroFlowerBR.style.willChange !== heroWc)   heroFlowerBR.style.willChange = heroWc;
 
-  /* Fix 2: Pre-activate journeyCanvas GPU layer saat hero sudah 80%
-     supaya compositor sudah siap saat transisi terjadi — tidak ada
-     frame drop akibat GPU layer baru dibuat di tengah animasi. */
-  const nearTransition = heroCur > 0.80 && zone === 0;
-  const journeyActive = inJourney || nearTransition;
-  journeyCanvas.classList.toggle('active', journeyActive);
-
   /* Canvas opacity — direct style, bukan GSAP */
-  heroCanvas.style.opacity    = heroOpacity.toFixed(4);
-  journeyCanvas.style.opacity = fade.toFixed(4);
+  heroCanvas.style.opacity = '1';
 
-  scrollHint.style.display = inJourney ? 'none' : '';
-
-  if (inJourney || nearTransition) renderJourney(jCur);
-  else setProgress(heroCur * 100);
+  scrollHint.style.display = (!inviteOpen && !heroDone) ? '' : 'none';
+  setProgress(heroCur * 100);
 };
 
 /* smooth di-cache, update hanya saat resize */
@@ -1602,12 +1227,11 @@ const tickFn = (delta) => {
   const s   = Math.min(_smoothVal * mul, 0.95);
 
   heroCur += (heroTarget - heroCur) * s;
-  jCur    += (jTarget    - jCur)    * s;
   render();
 
-  const done = Math.abs(heroTarget - heroCur) < .0004 && Math.abs(jTarget - jCur) < .0004;
+  const done = Math.abs(heroTarget - heroCur) < .0004;
   if (done) {
-    heroCur = heroTarget; jCur = jTarget;
+    heroCur = heroTarget;
     render();
     _tickerActive = false; /* tutup gate, subscription tetap hidup */
     if (rafId) { cancelAnimationFrame(rafId); rafId = 0; }
@@ -1642,7 +1266,7 @@ const attachTempus = () => {
     _tempusUnsub = null; /* gagal → RAF fallback tetap jalan */
   }
   /* Kalau ada animasi pending saat boot, langsung kick */
-  if (Math.abs(heroTarget - heroCur) > .0004 || Math.abs(jTarget - jCur) > .0004) {
+  if (Math.abs(heroTarget - heroCur) > .0004) {
     kickRaf();
   }
 };
@@ -1651,8 +1275,6 @@ const resetSceneToTopImmediate = () => {
   resetInputMomentum();
   _stopTicker();
   heroAccum = heroTarget = heroCur = 0;
-  jAccum    = jTarget    = jCur    = 0;
-  zone = 0;
 };
 
 /* ── Buttons ── */
@@ -1667,13 +1289,14 @@ function openInvite() {
   persistSessionState({ hasOpened: true, inviteOpen: true });
   mainContent.scrollTo({ top: 0, behavior: 'auto' });
   renderComments();
+  render();
 }
 btnContinue.addEventListener('click', openInvite);
 btnBack.addEventListener('click', () => {
   mainContent.classList.remove('show');
   document.body.classList.remove('invite-open');
   document.documentElement.classList.remove('invite-open-boot');
-  if (_lenis) _lenis.start(); /* resume Lenis saat kembali ke hero/journey */
+  if (_lenis) _lenis.start();
   resetSceneToTopImmediate();
   clearTimeout(_saveTimer);
   try { sessionStorage.removeItem(_SS_KEY); } catch(e) {}
@@ -1681,14 +1304,22 @@ btnBack.addEventListener('click', () => {
   render(); kickRaf();
 });
 btnTop.addEventListener('click', () => {
+  if (mainContent.classList.contains('show')) {
+    mainContent.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
   resetSceneToTopImmediate();
-  clearTimeout(_saveTimer);
-  try { sessionStorage.removeItem(_SS_KEY); } catch(e) {}
-  _hasOpenedInvite = false;
-  document.documentElement.classList.remove('invite-open-boot');
-  render(); kickRaf();
+  render();
+  kickRaf();
 });
-btnDown.addEventListener('click', openInvite);
+btnDown.addEventListener('click', () => {
+  if (mainContent.classList.contains('show')) {
+    const step = Math.max(280, Math.round(window.innerHeight * 0.82));
+    mainContent.scrollBy({ top: step, behavior: 'smooth' });
+    return;
+  }
+  openInvite();
+});
 
 /* ── App boot ── */
 const restoreSavedViewState = () => {
@@ -1721,8 +1352,6 @@ const startApp = () => {
   render();
   initMusic();
   void initSupabase();
-  if (document.documentElement.classList.contains('journey-open-boot'))
-    requestAnimationFrame(() => document.documentElement.classList.remove('journey-open-boot'));
   requestAnimationFrame(() => document.documentElement.classList.remove('scene-boot'));
 
   /* GPU warm-up — paksa browser decode dan composite semua layer
