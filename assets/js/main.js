@@ -338,6 +338,7 @@ let commentPage = (() => {
 let supabase = null;
 let supabaseReadyPromise = null;
 let supabaseRealtimeChannel = null;
+let realtimeRetryTimer = 0;
 const cmtPager = document.getElementById('cmtPager');
 const cmtPrev = document.getElementById('cmtPrev');
 const cmtNext = document.getElementById('cmtNext');
@@ -346,8 +347,20 @@ const saveCommentPage = () => {
   try { sessionStorage.setItem(COMMENT_PAGE_SS_KEY, String(commentPage)); } catch(e) {}
 };
 
+const scheduleRealtimeReconnect = () => {
+  if (realtimeRetryTimer) return;
+  realtimeRetryTimer = window.setTimeout(() => {
+    realtimeRetryTimer = 0;
+    attachUcapanRealtime();
+  }, 3000);
+};
+
 const attachUcapanRealtime = () => {
-  if (!supabase || supabaseRealtimeChannel) return;
+  if (!supabase) return;
+  if (supabaseRealtimeChannel) {
+    try { void supabase.removeChannel(supabaseRealtimeChannel); } catch(e) {}
+    supabaseRealtimeChannel = null;
+  }
   supabaseRealtimeChannel = supabase
     .channel('ucapan-realtime')
     .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'ucapan' }, (payload) => {
@@ -356,7 +369,20 @@ const attachUcapanRealtime = () => {
       saveCommentPage();
       renderComments();
     })
-    .subscribe();
+    .subscribe((status) => {
+      if (status === 'SUBSCRIBED') {
+        if (realtimeRetryTimer) {
+          clearTimeout(realtimeRetryTimer);
+          realtimeRetryTimer = 0;
+        }
+        void loadUcapan();
+        return;
+      }
+      if (status === 'CLOSED' || status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
+        supabaseRealtimeChannel = null;
+        scheduleRealtimeReconnect();
+      }
+    });
 };
 
 const initSupabase = async () => {
@@ -389,6 +415,18 @@ async function loadUcapan() {
   comments = data || [];
   renderComments();
 }
+
+const reconnectUcapanRealtime = () => {
+  if (!supabase) return;
+  attachUcapanRealtime();
+  void loadUcapan();
+};
+
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState !== 'visible') return;
+  reconnectUcapanRealtime();
+});
+window.addEventListener('online', reconnectUcapanRealtime);
 
 const ensureMainContentAssets = () => {
   if (mainContentAssetsReady || !mainContent) return;
